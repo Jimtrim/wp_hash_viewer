@@ -78,6 +78,7 @@ class Instagram_Hash_Viewer {
 		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 		wp_enqueue_style( 'hashviewer-style', plugins_url( 'hash-viewer/css/main.css' ) );
 		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
+
 	}
 
 	public function activate() {
