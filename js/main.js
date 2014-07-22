@@ -52,7 +52,7 @@ HashViewer.createGalleryBlock = function(post) {
 	var user = post.user;
 	var caption = post.caption;
 
-	var out += '<div width="'+image.width+'px" class="gallery-block text-center">';
+	var out = '<div width="'+image.width+'px" class="gallery-block text-center">';
 		out +=		'<a href="'+post.link+'"><img width="'+image.width+'px" class="gallery-image col-sm-12" src ="'+image.url+'" /></a>';
 		out +=		'<em>User: <a href="http://instagram.com/'+user.username+'">'+user.username+'</a></em>';
 		/* if (caption) {
