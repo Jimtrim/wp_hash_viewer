@@ -1,11 +1,12 @@
 <?php 
-wp_enqueue_style( 'hashviewer_gallery', plugins_url( 'hash-viewer/css/gallery.css' ));
+wp_enqueue_style( 'bootstrap_style', '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css');
+wp_enqueue_style( 'hashviewer_gallery', plugins_url( 'hash-viewer/css/gallery.css'));
 wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 ?>
 
 <h1>Instagram HashViewer</h1>
 
-<div class="container">
+<div class="container col-md-11">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="form-group">
@@ -22,7 +23,7 @@ wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ))
 		</div>
 	</div>
 
-	<div class="container">
+	<div class="container col-sm-12">
 		<div id="error-container" class="hidden alert alert-danger">
 		</div>
 		<div id="gallery" class="row">
@@ -32,7 +33,7 @@ wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ))
 		</div>
 	</div>
 
-
+	<div class="clearfix"></div>
 	<footer>
 		<hr />
 		<p><em>This page is made with the Instagram API.</em> <a href="https://github.com/Jimtrim/TagViewer/">GitHub</a></p>

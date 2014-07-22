@@ -28,7 +28,7 @@ HashViewer.getInputField = function () {
 	return jQuery("input[id='tag-text']");
 };
 HashViewer.getInputValue = function () {
-	HashViewer.getInputField().val();
+	return HashViewer.getInputField().val();
 };
 HashViewer.setInputValue = function (val) {
 	HashViewer.getInputField().val(val);
@@ -56,9 +56,9 @@ HashViewer.createGalleryBlock = function(post) {
 		out += '<div width="'+image.width+'px" class="gallery-block text-center">';
 		out +=		'<a href="'+post.link+'"><img width="'+image.width+'px" class="gallery-image col-sm-12" src ="'+image.url+'" /></a>';
 		out +=		'<em>User: <a href="http://instagram.com/'+user.username+'">'+user.username+'</a></em>';
-		if (caption) {
+		/* if (caption) {
 			out +=	'<p>'+this.splitHashtags(caption.text)+'</p>';
-		}
+		} */
 		out +=  '</div>'; //width-fix END
 		out += '</div>';
 	
@@ -90,7 +90,7 @@ HashViewer.updateGallery = function(event, in_tag) {
 	if (HashViewer.getInputValue() === "") 
 		HashViewer.setInputValue(tag); // Set search field to location hash when navigating directly to search
 
-	HashViewer.next_url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
+	HashViewer.next_url = 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
 	console.log(HashViewer.next_url);
 	if (HashViewer.next_max_tag_id) 
 		HashViewer.next_url += "&max_tag_id="+HashViewer.next_max_tag_id;

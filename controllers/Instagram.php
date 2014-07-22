@@ -1,5 +1,4 @@
 <?php
-	// https://api.instagram.com/v1/tags/rkjeller/media/recent?client_id=d81afea83c3f40b5a5485418e2a53aa7
 	require 'vendor/autoload.php';
 
 	use Httpful\Request;

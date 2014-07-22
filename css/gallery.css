@@ -5,8 +5,8 @@
 }
 
 .gallery-block {
-	width: 306px;
-	margin: 5px 0 10px 0;
+	float: left;
+	margin: 5px 10px 10px 0;
 	padding: 0 0 5px 0;
 	border: 0px solid #AAA;
 	border-radius: 10px;

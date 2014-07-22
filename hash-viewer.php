@@ -19,7 +19,7 @@ class Instagram_Hash_Viewer {
 	private static $values = array(
 		'title' => "Instagram HashViewer",
 		'menu_title' => "Instagram HashViewer",
-		'identifier' => "MyUniqueIdentifier"
+		'identifier' => "instagram_page_slug"
 	);
 
 	public function __construct() {
@@ -31,7 +31,7 @@ class Instagram_Hash_Viewer {
 
 	public static function plugin_menu() {
 		$opt = self::$values;
-		add_options_page( $opt['title'], $opt['menu_title'], 'manage_options', 
+		add_media_page( $opt['title'], $opt['menu_title'], 'manage_options', 
 			'options_page_slug', array('Instagram_Hash_Viewer', 'settings_page') ); //TODO find a better placement
 	} 
 
