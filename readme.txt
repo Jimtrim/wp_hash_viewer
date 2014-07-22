@@ -1,8 +1,11 @@
 === Plugin Name ===
 Contributors: Jimtrim
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jimfrodehoff%40gmail%2ecom&lc=NO&item_name=wp_hash_viewer&item_number=wp_hash_viewer&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Tags: instagram, tag, hashtag, view, viewer
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 0.2
+Tested up to: 0.2
 Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -36,6 +39,10 @@ Answer to foo bar dilemma.
 == Screenshots ==
 
 1. This screen shot shows the admin panel, with a a search active
+
+== Upgrade Notice ==
+
+No upgrade notice yet
 
 == Changelog ==
 
