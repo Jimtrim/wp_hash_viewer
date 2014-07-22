@@ -23,6 +23,7 @@ class Instagram_Hash_Viewer {
 	);
 
 	public function __construct() {
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
 		register_activation_hook( __FILE__, array( 'Instagram_Hash_Viewer', 'activate' ) );
 		register_deactivation_hook( __FILE__, array( 'Instagram_Hash_Viewer', 'deactivate' ) );
@@ -40,7 +41,10 @@ class Instagram_Hash_Viewer {
 
 	public function register_plugin_scripts() {
 		// does nothing atm, but this is the OOP way to do things
-		// wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
+		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
+	}	
+	public function register_plugin_styles() {
+		wp_enqueue_style( 'instagram-gallery', plugins_url( 'hash-viewer/css/gallery.css' ) );
 	}
 
 	public function activate() {}

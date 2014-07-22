@@ -12,7 +12,7 @@ HashViewer.next_url = undefined;
 HashViewer.next_max_tag_id = undefined;
 HashViewer.last_tag = '';
 HashViewer.no_of_pictures = 0;
-HashViewer.CLIENT_ID = "d81afea83c3f40b5a5485418e2a53aa7"
+HashViewer.CLIENT_ID = "d81afea83c3f40b5a5485418e2a53aa7";
 
 HashViewer.reset = function() {
 	console.log("reset called");
@@ -24,12 +24,14 @@ HashViewer.reset = function() {
 	jQuery("#more-btn").addClass('hidden');
 };
 
-
-HashViewer.getInputValue = function () {
+HashViewer.getInputField = function () {
 	return jQuery("input[id='tag-text']");
 };
+HashViewer.getInputValue = function () {
+	HashViewer.getInputField().val();
+};
 HashViewer.setInputValue = function (val) {
-	jQuery("input[id='tag-text']").val(val);
+	HashViewer.getInputField().val(val);
 };
 
 
@@ -85,47 +87,48 @@ HashViewer.updateGallery = function(event, in_tag) {
 	}
 
 
-	if (HashViewer.getInputValue().val() === "") 
-		HashViewer.getInputValue().val(tag); // Set search field to location hash when navigating directly to search
+	if (HashViewer.getInputValue() === "") 
+		HashViewer.setInputValue(tag); // Set search field to location hash when navigating directly to search
 
-	url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
+	HashViewer.next_url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
+	console.log(HashViewer.next_url);
 	if (HashViewer.next_max_tag_id) 
 		HashViewer.next_url += "&max_tag_id="+HashViewer.next_max_tag_id;
 
 	jQuery.ajax({
 		url: HashViewer.next_url,
 		type: 'get',
-		dataType: 'json'
-	})
-	.done(function(res) {
-		if (res.meta.code >= 400) { // if requests responds with HTTP error codes
-			HashViewer.displayError("ERROR: "+res.meta.error_message);
-		} else {
-			jQuery.each(res.data, function(i, post) {
-				if (HashViewer.no_of_pictures % 4 === 0) jQuery("#gallery").append('<div class="clearfix visible-lg visible-sm">');
-				else if(HashViewer.no_of_pictures % 2 === 0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
-				if (HashViewer.no_of_pictures % 3 === 0) jQuery("#gallery").append('<div class="clearfix visible-md">');
-
-				jQuery("#gallery").append(HashViewer.createGalleryBlock(post));
-				HashViewer.no_of_pictures += 1;
-			});
-
-			if (res.pagination.next_max_tag_id) {
-				jQuery("#more-btn").removeClass('hidden');
-				HashViewer.next_max_tag_id = res.pagination.next_max_tag_id;
+		dataType: 'jsonp'
+		})
+		.done(function(res) {
+			if (res.meta.code >= 400) { // if requests responds with HTTP error codes
+				HashViewer.displayError("ERROR: "+res.meta.error_message);
 			} else {
-				jQuery("#more-btn").addClass('hidden');
-			}
-		}
+				jQuery.each(res.data, function(i, post) {
+					if (HashViewer.no_of_pictures % 4 === 0) jQuery("#gallery").append('<div class="clearfix visible-lg visible-sm">');
+					else if(HashViewer.no_of_pictures % 2 === 0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
+					if (HashViewer.no_of_pictures % 3 === 0) jQuery("#gallery").append('<div class="clearfix visible-md">');
 
-	})
-	.fail(function(err) {
-		console.log("fail: " + HashViewer.next_url);
-		HashViewer.displayError("FAILURE:"+err);
-	})
-	.error(function(XHR, status, err) {
-		console.log("error: " + HashViewer.next_url);
-		HashViewer.displayError("ERROR:"+err);
+					jQuery("#gallery").append(HashViewer.createGalleryBlock(post));
+					HashViewer.no_of_pictures += 1;
+				});
+
+				if (res.pagination.next_max_tag_id) {
+					jQuery("#more-btn").removeClass('hidden');
+					HashViewer.next_max_tag_id = res.pagination.next_max_tag_id;
+				} else {
+					jQuery("#more-btn").addClass('hidden');
+				}
+			}
+
+		})
+		.fail(function(err) {
+			console.log("fail: " + HashViewer.next_url);
+			HashViewer.displayError("FAILURE:"+err);
+		})
+		.error(function(XHR, status, err) {
+			console.log("error: " + HashViewer.next_url);
+			HashViewer.displayError("ERROR:"+err);
 	});
 	
 	return this;
@@ -134,7 +137,7 @@ HashViewer.updateGallery = function(event, in_tag) {
 jQuery(document).ready(function($) {
 	// $("button[id='tag-btn']").bind('click', HashViewer.updateWindowHash()); 
 
-	HashViewer.getInputValue().keypress(function (e) { // enter-fix for search
+	HashViewer.getInputField().keypress(function (e) { // enter-fix for search
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
             $("button[id='tag-btn']").click();
             $(this).blur();	
@@ -144,6 +147,6 @@ jQuery(document).ready(function($) {
         }
     });
 
-	//HashViewer.setInputValue("");
+	HashViewer.reset();
 
 });
