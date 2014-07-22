@@ -4,9 +4,8 @@ wp_enqueue_style( 'hashviewer_gallery', plugins_url( 'hash-viewer/css/gallery.cs
 wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 ?>
 
-<h1>Instagram HashViewer</h1>
-
 <div class="container col-md-11">
+	<h3>Instagram HashViewer</h3>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="form-group">
@@ -36,7 +35,7 @@ wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ))
 	<div class="clearfix"></div>
 	<footer>
 		<hr />
-		<p><em>This page is made with the Instagram API.</em> <a href="https://github.com/Jimtrim/TagViewer/">GitHub</a></p>
+		<p><em>This page is made with the Instagram API.</em>
 	</footer>
 </div>
 

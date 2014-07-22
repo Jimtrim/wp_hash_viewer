@@ -52,15 +52,13 @@ HashViewer.createGalleryBlock = function(post) {
 	var user = post.user;
 	var caption = post.caption;
 
-	var out = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
-		out += '<div width="'+image.width+'px" class="gallery-block text-center">';
+	var out += '<div width="'+image.width+'px" class="gallery-block text-center">';
 		out +=		'<a href="'+post.link+'"><img width="'+image.width+'px" class="gallery-image col-sm-12" src ="'+image.url+'" /></a>';
 		out +=		'<em>User: <a href="http://instagram.com/'+user.username+'">'+user.username+'</a></em>';
 		/* if (caption) {
 			out +=	'<p>'+this.splitHashtags(caption.text)+'</p>';
 		} */
 		out +=  '</div>'; //width-fix END
-		out += '</div>';
 	
 	return out;
 };
@@ -105,10 +103,6 @@ HashViewer.updateGallery = function(event, in_tag) {
 				HashViewer.displayError("ERROR: "+res.meta.error_message);
 			} else {
 				jQuery.each(res.data, function(i, post) {
-					if (HashViewer.no_of_pictures % 4 === 0) jQuery("#gallery").append('<div class="clearfix visible-lg visible-sm">');
-					else if(HashViewer.no_of_pictures % 2 === 0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
-					if (HashViewer.no_of_pictures % 3 === 0) jQuery("#gallery").append('<div class="clearfix visible-md">');
-
 					jQuery("#gallery").append(HashViewer.createGalleryBlock(post));
 					HashViewer.no_of_pictures += 1;
 				});
