@@ -55,12 +55,12 @@ class Instagram_Hash_Viewer {
 	}
 	
 	public function settings_page() {
-		echo $this->twig->render('settings.twig.php');
+		echo $this->twig->render('main.twig.html', array("data" => $this->getAllCompetitions()) );
 	}
 
 
 	public function browse_page() {
-		echo $this->twig->render('browse.twig.php');
+		echo $this->twig->render('browse.twig.html');
 	}
 
 	/**
@@ -93,6 +93,15 @@ class Instagram_Hash_Viewer {
 	/**
 	 * DB functions 
 	 */
+	public function getAllCompetitions() {
+		global $wpdb;
+		$sql = "select * from wp_hashviewer_competition;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
+	}
+
+
 	private function db_install() {
 		global $wpdb;
 
