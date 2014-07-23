@@ -14,7 +14,9 @@ HashViewer is a plugin for browsing Instagram pictures base on hashtags within t
 
 == Description ==
 
-HashViewer has the hope for making Instagram competitions a breeze. Viewing, rating, and interacting with the participants of your competition right from your websites admin panel makes for a more streamlined workflow
+HashViewer has the hope for making Instagram competitions a breeze. Viewing, rating, and interacting with the participants of your competition right from your websites admin panel makes for a more streamlined workflow.
+
+This plugin will be using the Instagram API, and may require an Instagram account and/or client ID in future versions.
 
 == Installation ==
 
@@ -28,13 +30,9 @@ e.g.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Is ths plugin really stable? =
 
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
+It should be stable, but do not expect the plugin you see today to be the same you see tomorrow. At least not yet. The development of this plugin started July 22th 2014, and will be changing a lot in the close future
 
 == Screenshots ==
 
