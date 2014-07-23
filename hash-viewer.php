@@ -18,10 +18,6 @@ $viewer = new Instagram_Hash_Viewer();
 
 class Instagram_Hash_Viewer {
 	private static $instance = null;
-	private static $values = array(
-		'title' => "HashViewer",
-		'menu_title' => "HashViewer"
-	);
 
 	private $twig_loader;
 	private $twig;
@@ -47,7 +43,6 @@ class Instagram_Hash_Viewer {
 	 * Views
 	 */
 	public function menu_setup() {
-		$opt = self::$values;
 		add_menu_page( "HashViewer", "HashViewer", 'manage_options', 
 			'hashviewer_main_slug', array($this, 'settings_page'), plugin_dir_url( __FILE__ ) . '/img/menu_icon.png' );
 		add_submenu_page( "hashviewer_main_slug", "HashViewer - Browse", "Browse", 'manage_options', 
