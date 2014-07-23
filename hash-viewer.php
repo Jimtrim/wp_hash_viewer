@@ -13,8 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $viewer = new Instagram_Hash_Viewer();
 
-# Load Composer plugins
-require_once(plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
 // register_uninstall_hook( __FILE__, array( 'Plugin_Class_Name', 'uninstall' ) );
 
@@ -25,10 +23,22 @@ class Instagram_Hash_Viewer {
 		'menu_title' => "HashViewer"
 	);
 
+	private $twig_loader;
+	private $twig;
+
 	public function __construct() {
+		# Load Composer plugins
+		require_once(plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
+		$this->twig_loader = new Twig_Loader_Filesystem(plugin_dir_path( __FILE__ ) . '/views/');
+		$this->twig = new Twig_Environment($this->twig_loader);
+
 		add_action( 'admin_menu', array($this, 'menu_setup'));
-		add_action( 'wp_enqueue_styles', array( $this, 'register_plugin_styles' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
+		add_action( 'wp_enqueue_styles', array( $this, 'register_frontend_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_forntent_scripts' ) );
+
+		# Scripts for the admin interface
+		add_action('admin_enqueue_scripts', array( $this, 'register_admin_scripts'));
+
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 	}
@@ -39,28 +49,33 @@ class Instagram_Hash_Viewer {
 	 */
 	public function menu_setup() {
 		$opt = self::$values;
-		add_menu_page( $opt['title'], $opt['menu_title'], 'manage_options', 
+		add_menu_page( "HashViewer", "HashViewer", 'manage_options', 
 			'hashviewer_main_slug', array($this, 'settings_page'), plugin_dir_url( __FILE__ ) . '/img/menu_icon.png' );
 		add_submenu_page( "hashviewer_main_slug", "HashViewer - Browse", "Browse", 'manage_options', 
 			"hashviewer_browse_slug", array($this, 'browse_page') ); 
 	}
 	
 	public function settings_page() {
-		include( plugin_dir_path( __FILE__ ) . '/views/settings.php' );;
+		echo $this->twig->render('settings.twig.php');
 	}
 
 	public function browse_page() {
-		include( plugin_dir_path( __FILE__ ) . '/views/browse.php' );;
+		echo $this->twig->render('browse.twig.php');
 	}
 
 
 	/**
 	 * Initial setup
 	 */
-	public function register_plugin_scripts() {
+	public function register_frontend_scripts() {
 		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
+	}
+	public function register_frontend_styles() {
+		wp_enqueue_style( 'hashviewer-style', plugins_url( 'hash-viewer/css/main.css' ) );
+		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
 	}	
-	public function register_plugin_styles() {
+	public function register_admin_scripts() {
+		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 		wp_enqueue_style( 'hashviewer-style', plugins_url( 'hash-viewer/css/main.css' ) );
 		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
 	}
@@ -70,11 +85,14 @@ class Instagram_Hash_Viewer {
 			$this->db_install();
 			add_option( "ihw_db_version", "0.2");
 		}
-
 	}
 
 	public function deactivate() {}
 
+
+	/**
+	 * DB functions 
+	 */
 	private function db_install() {
 		global $wpdb;
 
