@@ -37,7 +37,6 @@ class Instagram_Hash_Viewer {
 
 		# Scripts for the admin interface
 		add_action('admin_enqueue_scripts', array( $this, 'register_admin_scripts'));
-
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 	}
@@ -63,7 +62,6 @@ class Instagram_Hash_Viewer {
 
 	}
 
-
 	/**
 	 * Initial setup
 	 */
@@ -73,12 +71,11 @@ class Instagram_Hash_Viewer {
 	public function register_frontend_styles() {
 		wp_enqueue_style( 'hashviewer-style', plugins_url( 'hash-viewer/css/main.css' ) );
 		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
-	}	
+	}
 	public function register_admin_scripts() {
 		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 		wp_enqueue_style( 'hashviewer-style', plugins_url( 'hash-viewer/css/main.css' ) );
 		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
-
 	}
 
 	public function activate() {
@@ -89,7 +86,6 @@ class Instagram_Hash_Viewer {
 	}
 
 	public function deactivate() {}
-
 	/**
 	 * DB functions 
 	 */
