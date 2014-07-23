@@ -8,40 +8,55 @@
  * Author URI: http://jimtrim.github.io
  */
 
-
 // Instagram client_id = 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 $viewer = new Instagram_Hash_Viewer();
+
+# Load Composer plugins
+require_once(plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
 // register_uninstall_hook( __FILE__, array( 'Plugin_Class_Name', 'uninstall' ) );
 
 class Instagram_Hash_Viewer {
 	private static $instance = null;
 	private static $values = array(
-		'title' => "Instagram HashViewer",
-		'menu_title' => "Instagram HashViewer",
-		'identifier' => "instagram_page_slug"
+		'title' => "HashViewer",
+		'menu_title' => "HashViewer"
 	);
 
 	public function __construct() {
-		add_action( 'admin_menu', array($this, 'plugin_menu'));
+		add_action( 'admin_menu', array($this, 'menu_setup'));
 		add_action( 'wp_enqueue_styles', array( $this, 'register_plugin_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 	}
 
-	public function plugin_menu() {
-		$opt = self::$values;
-		add_media_page( $opt['title'], $opt['menu_title'], 'manage_options', 
-			$opt['identifier'], array($this, 'settings_page') ); //TODO find a better placement
-	} 
 
+	/**
+	 * Views
+	 */
+	public function menu_setup() {
+		$opt = self::$values;
+		add_menu_page( $opt['title'], $opt['menu_title'], 'manage_options', 
+			'hashviewer_main_slug', array($this, 'settings_page'), plugin_dir_url( __FILE__ ) . '/img/menu_icon.png' );
+		add_submenu_page( "hashviewer_main_slug", "HashViewer - Browse", "Browse", 'manage_options', 
+			"hashviewer_browse_slug", array($this, 'browse_page') ); 
+	}
+	
 	public function settings_page() {
-		include( plugin_dir_path( __FILE__ ) . '/views/admin.php' );;
+		include( plugin_dir_path( __FILE__ ) . '/views/settings.php' );;
 	}
 
+	public function browse_page() {
+		include( plugin_dir_path( __FILE__ ) . '/views/browse.php' );;
+	}
+
+
+	/**
+	 * Initial setup
+	 */
 	public function register_plugin_scripts() {
 		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 	}	
@@ -99,7 +114,10 @@ class Instagram_Hash_Viewer {
 
 	}
 
-	public function filter_hashtags() {
+	/**
+	 * Util
+	 */
+	public function filter_hashtags($tags) {
 		return "";
 	}
 }
