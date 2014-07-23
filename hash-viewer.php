@@ -46,7 +46,7 @@ class Instagram_Hash_Viewer {
 		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 	}	
 	public function register_plugin_styles() {
-		wp_enqueue_style( 'instagram-gallery', plugins_url( 'hash-viewer/css/main.css' ) );
+		wp_enqueue_style( 'hashviewer-style', plugins_url( 'hash-viewer/css/main.css' ) );
 		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
 	}
 
