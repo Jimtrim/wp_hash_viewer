@@ -135,6 +135,9 @@ class Instagram_Hash_Viewer {
 		return "";
 	}
 
+	public function filter_hashtags() {
+		return "";
+	}
 }
 
 
