@@ -12,8 +12,9 @@
 // Instagram client_id = 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+$viewer = new Instagram_Hash_Viewer();
+$viewer->db_install();
 
-add_action( 'admin_menu', array('Instagram_Hash_Viewer', 'plugin_menu'));
 // register_uninstall_hook( __FILE__, array( 'Plugin_Class_Name', 'uninstall' ) );
 
 class Instagram_Hash_Viewer {
@@ -25,19 +26,20 @@ class Instagram_Hash_Viewer {
 	);
 
 	public function __construct() {
+		add_action( 'admin_menu', array($this, 'plugin_menu'));
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
-		register_activation_hook( __FILE__, array( 'Instagram_Hash_Viewer', 'activate' ) );
-		register_deactivation_hook( __FILE__, array( 'Instagram_Hash_Viewer', 'deactivate' ) );
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 	}
 
-	public static function plugin_menu() {
+	public function plugin_menu() {
 		$opt = self::$values;
 		add_media_page( $opt['title'], $opt['menu_title'], 'manage_options', 
-			$opt['identifier'], array('Instagram_Hash_Viewer', 'settings_page') ); //TODO find a better placement
+			$opt['identifier'], array($this, 'settings_page') ); //TODO find a better placement
 	} 
 
-	public static function settings_page() {
+	public function settings_page() {
 		include( plugin_dir_path( __FILE__ ) . '/views/admin.php' );;
 	}
 
@@ -50,25 +52,29 @@ class Instagram_Hash_Viewer {
 	}
 
 	public function activate() {
-		// TODO: add checking for the database table
-		$this->hashviewer_install();
+		$this->db_install();
 	}
 
 	public function deactivate() {}
 
-	private function hashviewer_install() {
+	public function db_install() {
 		global $wpdb;
 
 		// come back to me if having \only\ 9 999 999 competitions is a problem
 		$competition_table_name = $wpdb->prefix . "hashviewer_competition";		
-		$competition_sql = "CREATE TABLE $competition_table_name (
-			id mediumint(9) NOT NULL AUTO_INCREMENT,
-
-		) CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		$competition_sql = "CREATE TABLE " . $competition_table_name . "(
+			id 					mediumint(9) NOT NULL AUTO_INCREMENT,
+			active 				BOOL,
+			startTime			DATETIME,
+			endTime				DATETIME,
+			hashtags			VARCHAR(255),
+			winnerSubmissionId	mediumint(12),
+			PRIMARY KEY (id)
+		) CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 
 		// ... and each of those competitions have over 1000 approved submission
 		$submission_table_name = $wpdb->prefix . "hashviewer_submission";
-		$submission_sql = "CREATE TABLE $submission_table_name (
+		$submission_sql = "CREATE TABLE " . $submission_table_name . "(
 			id 					mediumint(12) NOT NULL AUTO_INCREMENT,
 			instagramUsername 	varchar(30), -- 30 is a limitation from Instagram
 			instagramMediaID 	VARCHAR(255),
