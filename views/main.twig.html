@@ -1,2 +1,29 @@
-<h3>This is my main page.</h3>
-<p>I should probably set up the Competition View as a default view here</p>
+<div class="container col-sm-12">
+	<h3>Competitions</h3>
+	<table class="table">
+		<tr>
+			<th>Active</th>
+			<th>Start time</th>
+			<th>End time</th>
+			<th>Hashtags</th>
+			<th>Browse</th>
+			<th>Winner</th>
+		</tr>
+
+		{% for comp in data %}
+		<tr>
+			<td>{{ (comp.active == 1) ? 'Yes' : 'No' }}</td>
+			<td>{{ comp.startTime|date("d. M, Y H:i") }}</td>
+			<td>{{ comp.endTime|date("d. M, Y H:i") }}</td>
+			<td>
+				{% for tag in comp.hashtags|split(',') %}
+					<span class="tag">{{ tag }}</span>
+				{% endfor %}
+			</td>
+			<td><small>//TODO: Browse link</small></td>
+			<td>{{ comp.winnerSubmissionId ? comp.winnerSubmissionId : 'Not decided' }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+</div>
