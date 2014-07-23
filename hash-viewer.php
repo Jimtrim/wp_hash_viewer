@@ -67,6 +67,7 @@ class Instagram_Hash_Viewer {
 		$competition_table_name = $wpdb->prefix . "hashviewer_competition";		
 		$competition_sql = "CREATE TABLE " . $competition_table_name . "(
 			id 					mediumint(9) NOT NULL AUTO_INCREMENT,
+			title 				VARCHAR(50) NOT NULL,
 			active 				BOOL,
 			startTime			DATETIME,
 			endTime				DATETIME,
@@ -92,9 +93,15 @@ class Instagram_Hash_Viewer {
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $submission_sql );
 		dbDelta( $competition_sql );
+	}
+
+	public function create_competition($title, $hashtags, $startTime, $endTime) {
 
 	}
 
+	public function filter_hashtags() {
+		return "";
+	}
 }
 
 
