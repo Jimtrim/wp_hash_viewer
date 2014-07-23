@@ -13,7 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $viewer = new Instagram_Hash_Viewer();
 
-
 // register_uninstall_hook( __FILE__, array( 'Plugin_Class_Name', 'uninstall' ) );
 
 class Instagram_Hash_Viewer {
@@ -43,7 +42,6 @@ class Instagram_Hash_Viewer {
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 	}
 
-
 	/**
 	 * Views
 	 */
@@ -62,6 +60,7 @@ class Instagram_Hash_Viewer {
 
 	public function browse_page() {
 		echo $this->twig->render('browse.twig.php');
+
 	}
 
 
@@ -113,7 +112,6 @@ class Instagram_Hash_Viewer {
 		// ... and each of those competitions have over 1000 approved submission
 		$submission_table_name = $wpdb->prefix . "hashviewer_submission";
 		$submission_sql = "CREATE TABLE " . $submission_table_name . "(
-
 			id 					mediumint(12) NOT NULL AUTO_INCREMENT,
 			instagramUsername 	varchar(30), -- 30 is a limitation from Instagram
 			instagramMediaID 	VARCHAR(255),
