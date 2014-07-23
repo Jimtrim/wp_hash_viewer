@@ -95,11 +95,19 @@ class Instagram_Hash_Viewer {
 	 */
 	public function getAllCompetitions() {
 		global $wpdb;
-		$sql = "select * from wp_hashviewer_competition;";
+		$table_name = $wpdb->prefix . "hashviewer_competition";	
+		$sql = "SELECT active, startTime, endTime, hashtags, winnerSubmissionId 
+				FROM $table_name;";
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
+		$rows = $wpdb->get_results( $sql );
+		return $rows;
 	}
+
+	public function create_competition($title, $hashtags, $startTime, $endTime) {
+
+	}
+
 
 
 	private function db_install() {
@@ -135,10 +143,6 @@ class Instagram_Hash_Viewer {
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $submission_sql );
 		dbDelta( $competition_sql );
-	}
-
-	public function create_competition($title, $hashtags, $startTime, $endTime) {
-
 	}
 
 	/**
