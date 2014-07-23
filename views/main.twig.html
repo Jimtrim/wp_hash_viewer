@@ -2,7 +2,8 @@
 	<h3>Competitions</h3>
 	<table class="table">
 		<tr>
-			<th>Active</th>
+			<th class="col-sm-1">Active</th>
+			<th>Title</th>
 			<th>Start time</th>
 			<th>End time</th>
 			<th>Hashtags</th>
@@ -13,6 +14,7 @@
 		{% for comp in data %}
 		<tr>
 			<td>{{ (comp.active == 1) ? 'Yes' : 'No' }}</td>
+			<td>{{ comp.title }}</th>
 			<td>{{ comp.startTime|date("d. M, Y H:i") }}</td>
 			<td>{{ comp.endTime|date("d. M, Y H:i") }}</td>
 			<td>
