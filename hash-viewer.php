@@ -13,7 +13,6 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 $viewer = new Instagram_Hash_Viewer();
-$viewer->db_install();
 
 // register_uninstall_hook( __FILE__, array( 'Plugin_Class_Name', 'uninstall' ) );
 
@@ -27,7 +26,7 @@ class Instagram_Hash_Viewer {
 
 	public function __construct() {
 		add_action( 'admin_menu', array($this, 'plugin_menu'));
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
+		add_action( 'wp_enqueue_styles', array( $this, 'register_plugin_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
@@ -44,20 +43,24 @@ class Instagram_Hash_Viewer {
 	}
 
 	public function register_plugin_scripts() {
-		// does nothing atm, but this is the OOP way to do things
 		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 	}	
 	public function register_plugin_styles() {
 		wp_enqueue_style( 'instagram-gallery', plugins_url( 'hash-viewer/css/main.css' ) );
+		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
 	}
 
 	public function activate() {
-		$this->db_install();
+		if (get_option( "ihw_db_version", "Missing" ) == "Missing") {
+			$this->db_install();
+			add_option( "ihw_db_version", "0.2");
+		}
+
 	}
 
 	public function deactivate() {}
 
-	public function db_install() {
+	private function db_install() {
 		global $wpdb;
 
 		// come back to me if having \only\ 9 999 999 competitions is a problem
@@ -85,6 +88,10 @@ class Instagram_Hash_Viewer {
 			createdAt 			DATETIME, -- The time when the image was uploaded to Instagram 
 			PRIMARY KEY (id)
 		) CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $submission_sql );
+		dbDelta( $competition_sql );
 
 	}
 
