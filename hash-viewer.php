@@ -32,7 +32,7 @@ class Instagram_Hash_Viewer {
 	public static function plugin_menu() {
 		$opt = self::$values;
 		add_media_page( $opt['title'], $opt['menu_title'], 'manage_options', 
-			'options_page_slug', array('Instagram_Hash_Viewer', 'settings_page') ); //TODO find a better placement
+			$opt['identifier'], array('Instagram_Hash_Viewer', 'settings_page') ); //TODO find a better placement
 	} 
 
 	public static function settings_page() {
@@ -47,9 +47,22 @@ class Instagram_Hash_Viewer {
 		wp_enqueue_style( 'instagram-gallery', plugins_url( 'hash-viewer/css/main.css' ) );
 	}
 
-	public function activate() {}
+	public function activate() {
+		// TODO: add checking for the database table
+		$this->hashviewer_install();
+	}
 
 	public function deactivate() {}
+
+	private function hashviewer_install() {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . "hashviewer";	
+		$sql = "CREATE TABLE $table_name (
+			id mediumint(9) NOT NULL AUTO_INCREMENT,
+			time";
+
+	}
 
 }
 

@@ -35,11 +35,7 @@ wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ))
 			</div>
 		</div>
 
-		<div class="clearfix"></div>
-		<footer>
-			<hr />
-			<p><em>This page is made with the Instagram API.</em>
-		</footer>
+		
 	</div>
 	<div class="col-sm-2">
 		<div id="hashviewer-admin-panel">
@@ -47,5 +43,10 @@ wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ))
 		</div>
 	</div>
 </div>
+<div class="clearfix"></div>
+<footer>
+	<hr />
+	<p><em>This page is made with the Instagram API.</em>
+</footer>
 
 
