@@ -8,6 +8,8 @@
  * Author URI: http://jimtrim.github.io
  */
 
+
+// Instagram client_id = 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 
@@ -57,10 +59,26 @@ class Instagram_Hash_Viewer {
 	private function hashviewer_install() {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . "hashviewer";	
-		$sql = "CREATE TABLE $table_name (
+		// come back to me if having \only\ 9 999 999 competitions is a problem
+		$competition_table_name = $wpdb->prefix . "hashviewer_competition";		
+		$competition_sql = "CREATE TABLE $competition_table_name (
 			id mediumint(9) NOT NULL AUTO_INCREMENT,
-			time";
+
+		) CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+
+		// ... and each of those competitions have over 1000 approved submission
+		$submission_table_name = $wpdb->prefix . "hashviewer_submission";
+		$submission_sql = "CREATE TABLE $submission_table_name (
+			id 					mediumint(12) NOT NULL AUTO_INCREMENT,
+			instagramUsername 	varchar(30), -- 30 is a limitation from Instagram
+			instagramMediaID 	VARCHAR(255),
+			instagramImage 		VARCHAR(255),
+			tags 				VARCHAR(255),
+			caption 			TEXT,
+			approved 			Bool,
+			createdAt 			DATETIME, -- The time when the image was uploaded to Instagram 
+			PRIMARY KEY (id)
+		) CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
 
 	}
 
