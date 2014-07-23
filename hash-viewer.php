@@ -150,11 +150,6 @@ class Instagram_Hash_Viewer {
 		dbDelta( $competition_sql );
 	}
 
-
-	public function create_competition($title, $hashtags, $startTime, $endTime) {
-
-	}
-	
 	/**
 	 * Util
 	 */
