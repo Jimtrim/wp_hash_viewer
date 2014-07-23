@@ -59,6 +59,7 @@ class Instagram_Hash_Viewer {
 		echo $this->twig->render('settings.twig.php');
 	}
 
+
 	public function browse_page() {
 		echo $this->twig->render('browse.twig.php');
 	}
@@ -89,7 +90,6 @@ class Instagram_Hash_Viewer {
 	}
 
 	public function deactivate() {}
-
 
 	/**
 	 * DB functions 
@@ -139,6 +139,7 @@ class Instagram_Hash_Viewer {
 	public function filter_hashtags($tags) {
 		return "";
 	}
+
 }
 
 
