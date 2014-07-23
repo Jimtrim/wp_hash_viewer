@@ -39,7 +39,6 @@ class Instagram_Hash_Viewer {
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 	}
 
-
 	/**
 	 * Views
 	 */
@@ -113,6 +112,9 @@ class Instagram_Hash_Viewer {
 
 
 
+	/**
+	 * DB functions 
+	 */
 	private function db_install() {
 		global $wpdb;
 
@@ -148,6 +150,11 @@ class Instagram_Hash_Viewer {
 		dbDelta( $competition_sql );
 	}
 
+
+	public function create_competition($title, $hashtags, $startTime, $endTime) {
+
+	}
+	
 	/**
 	 * Util
 	 */
