@@ -13,6 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $viewer = new Instagram_Hash_Viewer();
 
+# Load Composer plugins
+require_once(plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
+
 // register_uninstall_hook( __FILE__, array( 'Plugin_Class_Name', 'uninstall' ) );
 
 class Instagram_Hash_Viewer {
@@ -37,6 +40,7 @@ class Instagram_Hash_Viewer {
 
 		# Scripts for the admin interface
 		add_action('admin_enqueue_scripts', array( $this, 'register_admin_scripts'));
+
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 	}
@@ -73,6 +77,7 @@ class Instagram_Hash_Viewer {
 		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
 	}
 	public function register_admin_scripts() {
+
 		wp_enqueue_script( 'hashviewer_script', plugins_url( 'hash-viewer/js/main.js' ));
 		wp_enqueue_style( 'hashviewer-style', plugins_url( 'hash-viewer/css/main.css' ) );
 		wp_enqueue_style( 'bootstrap-style', plugins_url( 'hash-viewer/css/bootstrap.min.css' ) );
