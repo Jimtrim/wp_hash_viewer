@@ -51,6 +51,7 @@ class Instagram_Hash_Viewer {
 	
 	public function settings_page() {
 		echo $this->twig->render('main.twig.html', array("data" => $this->getAllCompetitions()) );
+
 	}
 
 
