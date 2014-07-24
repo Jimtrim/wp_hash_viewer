@@ -3,6 +3,10 @@ class InstagramHashViewer {
 	private static $instance = null;
 
 	private $twig;
+<<<<<<< HEAD
+=======
+	private $slugs;
+>>>>>>> dev
 
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) )
@@ -22,6 +26,15 @@ class InstagramHashViewer {
 		add_action( 'admin_menu', array($this, 'admin_menu_setup'));
 		add_action( 'wp_enqueue_styles', array( $this, 'register_frontend_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
+<<<<<<< HEAD
+=======
+
+		$this->slugs = array(
+			'main' => 'hashviewer_main',
+			'new_competition' => 'hashviewer_new_competition',
+			'browse' => 'hashviewer_browse'
+		);
+>>>>>>> dev
 	}
 
 	/**
@@ -39,6 +52,7 @@ class InstagramHashViewer {
 	// Admin
 	public function admin_menu_setup() {
 		add_menu_page( "HashViewer", "HashViewer", 'manage_options', 
+<<<<<<< HEAD
 			'hashviewer_main', array($this, 'all_competitions'), HASHVIEWER_PLUGIN_DIR . '/img/menu_icon.png' );
 		add_submenu_page( "hashviewer_main", "HashViewer - Browse", "All Competitions", 'manage_options',
 			"hashviewer_main"); // main menu item
@@ -46,6 +60,15 @@ class InstagramHashViewer {
 			"hashviewer_new_competition", array($this, 'new_competition') );
 		add_submenu_page( "hashviewer_main", "HashViewer - Browse", "Browse Instagram", 'manage_options',
 			"hashviewer_browse", array($this, 'view') );
+=======
+			$this->slugs['main'], array($this, 'all_competitions'), HASHVIEWER_PLUGIN_URL . '/img/menu_icon.png' );
+		add_submenu_page( $this->slugs['main'], "HashViewer - Browse", "All Competitions", 'manage_options',
+			$this->slugs['main']); // main menu item
+		add_submenu_page( "hashviewer_main", "HashViewer - New competition", "New competition", 'manage_options',
+			$this->slugs['new_competition'], array($this, 'new_competition') );
+		add_submenu_page( "hashviewer_main", "HashViewer - Browse", "Browse Instagram", 'manage_options',
+			$this->slugs['browse'], array($this, 'browse') );
+>>>>>>> dev
 	}
 	
 	public function admin_init() {
@@ -79,7 +102,13 @@ class InstagramHashViewer {
 		if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
 			$this->create_new_competition();
 			$return_url = "";
+<<<<<<< HEAD
 			echo $this->twig->render('competition_created.twig.html', $return_url);
+=======
+			echo $this->twig->render('competition_created.twig.html', array(
+				"return_url" => get_admin_url() . 'admin.php?page=' . $this->slugs['main']
+			) );
+>>>>>>> dev
 		} else {
 			$data = array(
 				"plugin_url"	=> HASHVIEWER_PLUGIN_URL,
@@ -135,17 +164,32 @@ class InstagramHashViewer {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "hashviewer_competition";	
 
+<<<<<<< HEAD
 		//$startTime = strtotime($startTime);
 		//$endTime = strtotime($endTime);
+=======
+//		$startTime = strtotime($startTime);
+//		$endTime = strtotime($endTime) + 86399; // adds 23 hours, 59 minutes and 59 seconds to endtime
+		var_dump($endTime);
+>>>>>>> dev
 
 
 		$competition = array( 
 			'title'		=> $title, 
 			'hashtags' 	=> $hashtags, 
+<<<<<<< HEAD
 			'startTime'	=> $startTime,
 			'endTime' 	=> $endTime,
 			'active' 	=> 0
 		);
+=======
+			'startTime'	=> $startTime . " 00:00:00",
+			'endTime' 	=> $endTime . " 23:59:59",
+			'active' 	=> 0
+		);
+		var_dump($competition);
+
+>>>>>>> dev
 		$affected_rows = $wpdb->insert( $table_name, $competition );
 		return $affected_rows;
 	}

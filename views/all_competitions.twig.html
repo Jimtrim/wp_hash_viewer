@@ -30,17 +30,28 @@
 		{% for comp in competitions %}
 		<tr>
 			<td class="small-field">
+<<<<<<< HEAD
 				<input type="checkbox" disabled="disabled" {{ (comp.active == 1) ? 'checked' : ''}}>
+=======
+				<span class="glyphicon glyphicon-{{ (comp.active == 1) ? 'ok' : 'remove'}}"></span>
+>>>>>>> dev
 			</td>
 			<td>{{ comp.title }}</th>
 			<td>{{ comp.startTime|date("d. M, Y H:i") }}</td>
 			<td>{{ comp.endTime|date("d. M, Y H:i") }}</td>
 			<td>
 				{% for tag in comp.hashtags|split(',') %}
+<<<<<<< HEAD
 					<span class="tag">#{{ tag }}</span>
 				{% endfor %}
 			</td>
 			<td><small>//TODO: Browse link</small></td>
+=======
+					<div class="tag">#{{ tag }}</div>
+				{% endfor %}
+			</td>
+			<td><small><span class="glyphicon glyphicon-pencil"></span></small></td>
+>>>>>>> dev
 			<td>{{ comp.winnerSubmissionId ? comp.winnerSubmissionId : 'Not decided' }}</td>
 		</tr>
 		{% endfor %}
