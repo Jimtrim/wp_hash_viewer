@@ -37,3 +37,26 @@
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 }
+
+/* List view */
+.competition-table {
+}
+
+.competition-table tbody tr:nth-child(odd) { background-color: #F9F9F9;}
+.competition-table tbody tr:nth-child(even) { background-color: #FFF;}
+.competition-table .glyphicon{
+	font-size:1.4em;
+}
+
+
+.table .small-field {
+	witdh:40px;
+}
+.tag {
+	display:inline-block;
+	background-color: #EEEEEE;
+	border: 1px #C0C0C0 solid;
+	border-radius: 4px;
+	margin: 0 0 3px 0;
+	padding: 1px 2px;
+}

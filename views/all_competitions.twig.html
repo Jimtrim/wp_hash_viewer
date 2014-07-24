@@ -1,0 +1,50 @@
+<h2>HashViewer - Competitions</h2>
+
+<div class="container col-sm-12">
+	<h3>Competitions</h3>
+	<table class="competition-table wp-list-table widefat fixed">
+		<thead>
+		<tr>
+			<th class="manage small-field">Active</th>
+			<th class="manage">Title</th>
+			<th class="manage">Start time</th>
+			<th class="manage">End time</th>
+			<th class="manage">Hashtags</th>
+			<th class="manage">Browse</th>
+			<th class="manage">Winner</th>
+		</tr>
+		</thead>
+		<tfoot>
+			<tr>
+			<th class="manage small-field">Active</th>
+			<th class="manage">Title</th>
+			<th class="manage">Start time</th>
+			<th class="manage">End time</th>
+			<th class="manage">Hashtags</th>
+			<th class="manage">Browse</th>
+			<th class="manage">Winner</th>
+		</tr>
+		</tfoot>
+
+		<tbody>
+		{% for comp in competitions %}
+		<tr>
+			<td class="small-field">
+				<span class="glyphicon glyphicon-{{ (comp.active == 1) ? 'ok' : 'remove'}}"></span>
+			</td>
+			<td>{{ comp.title }}</th>
+			<td>{{ comp.startTime|date("d. M, Y H:i") }}</td>
+			<td>{{ comp.endTime|date("d. M, Y H:i") }}</td>
+			<td>
+				{% for tag in comp.hashtags|split(',') %}
+					<div class="tag">#{{ tag }}</div>
+				{% endfor %}
+			</td>
+			<td><small><span class="glyphicon glyphicon-pencil"></span></small></td>
+			<td>{{ comp.winnerSubmissionId ? comp.winnerSubmissionId : 'Not decided' }}</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+
+	</table>
+</div>
