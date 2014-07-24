@@ -7,7 +7,7 @@
 .wrap { /* fixing background color while scrolling*/
 	background-color: #FFF;
 	margin:0 0 0 -20px;
-	padding: 10px 20px 0 22px
+	padding: 10px 20px 10px 22px
 }
 
 .gallery-block {
