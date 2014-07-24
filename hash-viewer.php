@@ -155,10 +155,6 @@ class Instagram_Hash_Viewer {
 	public function filter_hashtags($tags) {
 		return "";
 	}
-
-	public function filter_hashtags() {
-		return "";
-	}
 }
 
 
