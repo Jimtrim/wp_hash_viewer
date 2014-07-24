@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jimfr
 Tags: instagram, tag, hashtag, view, viewer
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 0.2
-Tested up to: 0.2
+Requires at least: 3.9
+Tested up to: 3.9
 Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,10 +19,6 @@ HashViewer has the hope for making Instagram competitions a breeze. Viewing, rat
 This plugin will be using the Instagram API, and may require an Instagram account and/or client ID in future versions.
 
 == Installation ==
-
-This section describes how to install the plugin and get it working.
-
-e.g.
 
 1. Upload the `hash-viewer/` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
