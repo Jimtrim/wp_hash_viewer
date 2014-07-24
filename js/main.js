@@ -130,7 +130,6 @@ HashViewer.updateGallery = function(event, in_tag) {
 
 jQuery(document).ready(function($) {
 	// $("button[id='tag-btn']").bind('click', HashViewer.updateWindowHash()); 
-
 	HashViewer.getInputField().keypress(function (e) { // enter-fix for search
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
             $("button[id='tag-btn']").click();
@@ -140,7 +139,4 @@ jQuery(document).ready(function($) {
             return true;
         }
     });
-
-	HashViewer.reset();
-
 });
