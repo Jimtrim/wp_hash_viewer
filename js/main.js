@@ -52,12 +52,17 @@ HashViewer.createGalleryBlock = function(post) {
     var user = post.user;
     var caption = post.caption;
 
-    var out = '<div class="gallery-block text-center">';
+    var out = '<div class="gallery-block text-center" data-mediaid="'+post.id+'">';
     out += '<a href="' + post.link + '"><img class="gallery-image col-sm-12" src ="' + image.url + '" /></a>';
     out += '<em>User: <a href="http://instagram.com/' + user.username + '">' + user.username + '</a></em>';
     //out +=		'<div class="clearfix"></div>'
-    out += '<span class="favorite-icon glyphicon glyphicon-heart"></span>' //TODO: Inline styling, such ugly
-    out += '</div>'; //width-fix END
+    //TODO: Inline styling, such ugly
+    out += '<a href="javascript:HashViewer.wp.saveImage(\'' 
+        //format: (mediaId, username, imageUrl, createdTime)
+        + post.id + '\', \'' + user.username + '\', \'' + image.url + '\', \'' + post.created_time
+        + '\' );">'
+    out += '<span class="favorite-icon glyphicon glyphicon-heart"></span>'
+    out += '</a></div>'; //width-fix END
 
     return out;
 };

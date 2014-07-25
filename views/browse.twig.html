@@ -36,7 +36,7 @@
 	</div>
 
 	{# admin-panel, only visible if a competition is selected #}
-	{% if comp.hashtags is defined %}
+	{% if comp is defined %}
 	<div class="col-sm-3">
 		<div id="hashviewer-admin-panel">
 			<h4>Manage competitions</h4> 
@@ -45,6 +45,7 @@
 				<label>{{comp.title}}</label>
 			{% endif %}
 		</div>
+		<span id="compIdField" class="hidden">{{ comp.id }}</span>
 	</div>
 	{% endif %}
 </div>

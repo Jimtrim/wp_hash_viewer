@@ -45,10 +45,9 @@
 }
 
 /* List view */
-.competition-table {
-	margin-bottom: 10px;
-}
-
+.competition-table {margin-bottom: 10px;}
+.competition-table {margin-bottom: 10px;}
+.competition-table th {font-weight: bold;}
 .competition-table tbody tr:nth-child(odd) { background-color: #F9F9F9;}
 .competition-table tbody tr:nth-child(even) { background-color: #FFF;}
 .competition-table .glyphicon{

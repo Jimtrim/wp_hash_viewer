@@ -41,6 +41,7 @@ class HashViewer {
 	// Frontend
 	public function register_frontend_scripts() {
 		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/main.js' );
+		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/hashviewer.wp.js', array( 'jquery' ) );
 	}
 	public function register_frontend_styles() {
 		wp_enqueue_style( 'hashviewer-style', HASHVIEWER_PLUGIN_URL . 'css/main.css' );
@@ -61,6 +62,7 @@ class HashViewer {
 
 	public function admin_init() {
 		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/main.js', array( 'jquery' ) );
+		wp_enqueue_script( 'hashviewer_wp_script', HASHVIEWER_PLUGIN_URL . 'js/hashviewer.wp.js', array( 'jquery' ) );
 
 
 		wp_register_style( 'bootstrap-style', HASHVIEWER_PLUGIN_URL . 'css/bootstrap.min.css' );
@@ -130,28 +132,29 @@ class HashViewer {
 	/**
 	 * Installation functions
 	 * */
-	public function plugin_activate() {
+	public static function plugin_activate() {
 		if ( get_option( "ihw_db_version", "Missing" ) == "Missing" ) {
-			$this->db_install();
+			self::db_install();
 			add_option( "ihw_db_version", "0.2" );
 		}
 	}
 
-	public function plugin_deactivate() {
+	public static function plugin_deactivate() {
 		delete_option( "ihw_db_version" );
 	}
-	public function plugin_uninstall() {
+	public static function plugin_uninstall() {
 		if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 			exit();
-		$this->db_uninstall();
+		self::db_uninstall();
 	}
+
 	/**
 	 * DB functions
 	 * */
 	public function getCompetition( $id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "hashviewer_competition";
-		$sql = "SELECT active, title, startTime, endTime, hashtags, winnerSubmissionId
+		$sql = "SELECT id, active, title, startTime, endTime, hashtags, winnerSubmissionId
 				FROM $table_name
 				WHERE id='$id';";
 		$rows = $wpdb->get_results( $sql );
@@ -212,7 +215,23 @@ class HashViewer {
 		return $affected_rows;
 	}
 
-	private function db_install() {
+	public static function createNewSubmission() {
+		$data = array(
+			'compId' => "",
+			'instagramMediaId' => "",
+	        'instagramUsername' => "",
+	        'instagramImage' => "",
+	        'createdAt' => "",
+		);
+
+		global $wpdb;
+		foreach ($data as $key => $value)
+			if (isset($_POST[$key]))
+				$data[$key] = $_POST[$key];
+		//TODO: add input sanitization
+	}
+
+	private static function db_install() {
 		global $wpdb;
 
 		// come back to me if having \only\ 9 999 999 competitions is a problem
@@ -232,14 +251,13 @@ class HashViewer {
 		$submission_table_name = $wpdb->prefix . "hashviewer_submission";
 		$submission_sql = "CREATE TABLE " . $submission_table_name . "(
 			id 					mediumint(12) NOT NULL AUTO_INCREMENT,
+			compId 				mediumint(9) NOT NULL,
 			instagramUsername 	varchar(30), -- 30 is a limitation from Instagram
 			instagramMediaID 	VARCHAR(255),
 			instagramImage 		VARCHAR(255),
-			tags 				VARCHAR(255),
-			caption 			TEXT,
-			approved 			Bool,
 			createdAt 			DATETIME, -- The time when the image was uploaded to Instagram
-			PRIMARY KEY (id)
+			PRIMARY KEY (id),
+			FOREIGN KEY (compId) REFERENCES $competition_table_name(id)
 		) CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -247,25 +265,34 @@ class HashViewer {
 		dbDelta( $competition_sql );
 	}
 
+	private static function db_uninstall() {
+		global $wpdb;
+		$submission_table_name = $wpdb->prefix . "hashviewer_submission";
+		$competition_table_name = $wpdb->prefix . "hashviewer_competition";
+		$sql = "DROP TABLE $submission_table_name; DROP TABLE $competition_table_name";
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( $sql );
+	}
+
 	/**
 	 * Utilities
 	 * */
 	public function filter_hashtag( $tag ) {
-
 		return preg_match( "\W*\w*", $tag );
 	}
 
 
 
 	/**
-	 *  Test area
+	 *  AJAX resources
 	 * */
+	public function save_image() {
+		
+		$this->createNewSubmission();
 
-
-
-
-
-
-
+		echo "Submission for id ".$_POST['instagramMediaId']." created (when createNewSubmission actually sends its SQL)";
+		exit();
+	}
 
 }
