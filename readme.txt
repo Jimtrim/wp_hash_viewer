@@ -1,16 +1,16 @@
 === Plugin Name ===
 Contributors: Jimtrim
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jimfrodehoff%40gmail%2ecom&lc=NO&item_name=wp_hash_viewer&item_number=wp_hash_viewer&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
-Tags: instagram, tag, hashtag, view, viewer
+Tags: instagram, tag, hashtag, view, viewer, competition
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.9
 Tested up to: 3.9
-Stable tag: 0.2
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-HashViewer is a plugin for browsing Instagram pictures base on hashtags within the admin panel.
+HashViewer is a plugin for managing Instagram competitions based on hashtags within the admin panel.
 
 == Description ==
 
@@ -22,7 +22,7 @@ This plugin will be using the Instagram API, and may require an Instagram accoun
 
 1. Upload the `hash-viewer/` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Start using HashViewer in the media 
+3. Start using HashViewer in its own menu item
 
 == Frequently Asked Questions ==
 
@@ -39,6 +39,9 @@ It should be stable, but do not expect the plugin you see today to be the same y
 No upgrade notice yet
 
 == Changelog ==
+
+= 1.0 =
+* Got the wordpress.org trunk up and going
 
 = 0.2 =
 * Styles added to the admin panel

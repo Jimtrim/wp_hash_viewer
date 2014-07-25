@@ -17,8 +17,9 @@ define( 'HASHVIEWER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 require_once(plugin_dir_path( __FILE__ ) . 'classes/InstagramHashViewer.class.php');
 
-register_activation_hook( __FILE__, array( 'InstagramHashViewer', 'plugin_activation' ) );
-register_deactivation_hook( __FILE__, array( 'InstagramHashViewer', 'plugin_deactivation' ) );
+register_activation_hook( __FILE__, array( 'InstagramHashViewer', 'plugin_activate' ) );
+register_deactivation_hook( __FILE__, array( 'InstagramHashViewer', 'plugin_deactive' ) );
+register_uninstall_hook(__FILE__, array( 'InstagramHashViewer', 'plugin_uninstall' ));
 
 $viewer = InstagramHashViewer::get_instance();
 

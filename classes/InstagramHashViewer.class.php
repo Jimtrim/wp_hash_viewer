@@ -77,7 +77,8 @@ class InstagramHashViewer {
 	public function all_competitions() {
 		$data = array(
 			"plugin_url"	=> HASHVIEWER_PLUGIN_URL,
-			"competitions" 	=> $this->getAllCompetitions() 
+			"competitions" 	=> $this->getAllCompetitions(),
+			"browse_url"	=> get_admin_url() . 'admin.php?page=' . $this->slugs['browse'] 
 		);
 		echo $this->twig->render('all_competitions.twig.html', $data);
 	}
@@ -101,31 +102,56 @@ class InstagramHashViewer {
 
 
 	public function browse() {
-		echo $this->twig->render('browse.twig.html', array("data" => ""));
+		$data = array();
+
+		if (isset($_GET['compId'])) {
+			$data['comp'] = $this->getCompetition($_GET['compId']); //TODO: sanitize input
+		}
+
+		echo $this->twig->render('browse.twig.html', $data);
 	}
 
 
 	/**
 	 * Installation functions
 	 */
-	public function activate() {
+	public function plugin_activate() {
 		if (get_option( "ihw_db_version", "Missing" ) == "Missing") {
 			$this->db_install();
 			add_option( "ihw_db_version", "0.2");
 		}
 	}
 
-	public function deactivate() {
+	public function plugin_deactivate() {
 		delete_option("ihw_db_version" );
 	}
-
+	public function plugin_uninstall() {
+		if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) 
+    		exit();
+    	$this->db_uninstall();
+	}
 	/**
 	 * DB functions 
 	 */
-	public function getAllCompetitions() {
+	public function getCompetition($id) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "hashviewer_competition";	
 		$sql = "SELECT active, title, startTime, endTime, hashtags, winnerSubmissionId 
+				FROM $table_name
+				WHERE id='$id';";
+		$rows = $wpdb->get_results( $sql );
+
+		if ( isset($rows[0]) ){
+			return $rows[0];
+		} else {
+			return NULL;
+		}
+	}
+
+	public function getAllCompetitions() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "hashviewer_competition";	
+		$sql = "SELECT id, active, title, startTime, endTime, hashtags, winnerSubmissionId 
 				FROM $table_name;";
 
 		$rows = $wpdb->get_results( $sql );
@@ -197,7 +223,7 @@ class InstagramHashViewer {
 	/**
 	 * Utilities
 	 */
-	public function filter_hashtags($tags) {
-		return $tags;
+	public function filter_hashtag($tag) {
+		return $tag;
 	}
 }

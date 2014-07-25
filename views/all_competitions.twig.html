@@ -40,7 +40,11 @@
 					<div class="tag">#{{ tag }}</div>
 				{% endfor %}
 			</td>
-			<td><small><span class="glyphicon glyphicon-pencil"></span></small></td>
+			<td>
+				<a href="{{ browse_url }}&compId={{ comp.id }}">
+					<span class="glyphicon glyphicon-pencil"></span>
+				</a>
+			</td>
 			<td>{{ comp.winnerSubmissionId ? comp.winnerSubmissionId : 'Not decided' }}</td>
 		</tr>
 		{% endfor %}
