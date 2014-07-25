@@ -15,13 +15,13 @@ define( 'HASHVIEWER_VERSION', '3.0.1' );
 define( 'HASHVIEWER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'HASHVIEWER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
-require_once(plugin_dir_path( __FILE__ ) . 'classes/InstagramHashViewer.class.php');
+require_once(plugin_dir_path( __FILE__ ) . 'classes/HashViewer.class.php');
 
-register_activation_hook( __FILE__, array( 'InstagramHashViewer', 'plugin_activate' ) );
-register_deactivation_hook( __FILE__, array( 'InstagramHashViewer', 'plugin_deactive' ) );
-register_uninstall_hook(__FILE__, array( 'InstagramHashViewer', 'plugin_uninstall' ));
+register_activation_hook( __FILE__, array( 'HashViewer', 'plugin_activate' ) );
+register_deactivation_hook( __FILE__, array( 'HashViewer', 'plugin_deactive' ) );
+register_uninstall_hook(__FILE__, array( 'HashViewer', 'plugin_uninstall' ));
 
-$viewer = InstagramHashViewer::get_instance();
+$viewer = HashViewer::get_instance();
 
 
 
