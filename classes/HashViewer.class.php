@@ -1,5 +1,6 @@
 <?php
-class InstagramHashViewer {
+
+class HashViewer {
 	private static $instance = null;
 
 	private $twig;
@@ -224,6 +225,7 @@ class InstagramHashViewer {
 	 * Utilities
 	 */
 	public function filter_hashtag($tag) {
-		return $tag;
+
+		return preg_match("\W*\w*", $tag);
 	}
 }
