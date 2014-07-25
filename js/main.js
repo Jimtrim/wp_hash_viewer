@@ -68,10 +68,6 @@ HashViewer.displayError = function(message) {
 	console.log(message);
 };
 
-HashViewer.updateTag = function() {
-	HashViewer.updateGallery(HashViewer.getInputValue());
-};
-
 HashViewer.updateGallery = function(event, in_tag) {
 	console.log("updateGallery called");
 	jQuery('#error-container').addClass('hidden'); // Hide old errors

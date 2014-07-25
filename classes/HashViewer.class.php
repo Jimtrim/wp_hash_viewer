@@ -14,8 +14,11 @@ class HashViewer {
 
 	private function __construct() {
 
-		// Load Composer plugins
+		# Load Composer plugins
 		require_once(HASHVIEWER_PLUGIN_DIR. '/vendor/autoload.php');
+		# Load Instagram-PHP-API
+		require_once(HASHVIEWER_PLUGIN_DIR. '/vendor/Instagram.class.php');
+
 		$loader = new Twig_Loader_Filesystem(HASHVIEWER_PLUGIN_DIR . '/views/');
 		$this->twig = new Twig_Environment($loader);
 
@@ -57,7 +60,8 @@ class HashViewer {
 	}
 	
 	public function admin_init() {
-		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/main.js' );
+		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/main.js', array('jquery') );
+
 
 		wp_register_style( 'bootstrap-style', HASHVIEWER_PLUGIN_URL . 'css/bootstrap.min.css' );
 		wp_register_style( 'hashviewer-style', HASHVIEWER_PLUGIN_URL . 'css/main.css' );
@@ -66,36 +70,46 @@ class HashViewer {
 		wp_enqueue_style( 'hashviewer-style' );
 
 	}
-	public function register_admin_scripts() {
-
-	}
-	public function register_admin_styles() {
-	}
 
 	/**
 	 * Views
 	 */
 	public function all_competitions() {
-		$data = array(
-			"plugin_url"	=> HASHVIEWER_PLUGIN_URL,
-			"competitions" 	=> $this->getAllCompetitions(),
-			"browse_url"	=> get_admin_url() . 'admin.php?page=' . $this->slugs['browse'] 
-		);
-		echo $this->twig->render('all_competitions.twig.html', $data);
+		if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
+			if ($_POST["action"] == "delete-competition" && isset($_POST["compId"])){
+				$this->deleteCompetition($_POST["compId"]);
+				echo $this->twig->render('competition_action.twig.html', array(
+					"action"		=> "deleted",
+					"return_url" => get_admin_url() . 'admin.php?page=' . $this->slugs['main']
+				));
+			}
+		} else {
+			$data = array(
+				"plugin_url"	=> HASHVIEWER_PLUGIN_URL,
+				"new_comp_url"	=> get_admin_url() . 'admin.php?page=' . $this->slugs['new_competition'], 
+				"competitions" 	=> $this->getAllCompetitions(),
+				"browse_url"	=> get_admin_url() . 'admin.php?page=' . $this->slugs['browse'] 
+			);
+			echo $this->twig->render('all_competitions.twig.html', $data);
+		}
 	}
 	public function new_competition() {
 
 		if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
-			$this->create_new_competition();
-			$return_url = "";
-			echo $this->twig->render('competition_created.twig.html', array(
-				"return_url" => get_admin_url() . 'admin.php?page=' . $this->slugs['main']
-			) );
+			if ($_POST["action"] == "create-competition"){
+				$this->createNewCompetition();
+				$return_url = "";
+				echo $this->twig->render('competition_action.twig.html', array(
+					"action"		=> "created",
+					"return_url"	=> get_admin_url() . 'admin.php?page=' . $this->slugs['main']
+				));
+			}
 		} else {
 			$data = array(
 				"plugin_url"	=> HASHVIEWER_PLUGIN_URL,
 				"admin_url"		=> get_admin_url(),
-				"request_url"	=> $_SERVER['REQUEST_URI']
+				"request_url"	=> $_SERVER['REQUEST_URI'],
+				"all_comps_url"	=> get_admin_url() . 'admin.php?page=' . $this->slugs['main']
 			);
 			echo $this->twig->render('new_competition.twig.html', $data);
 		}
@@ -103,8 +117,8 @@ class HashViewer {
 
 
 	public function browse() {
+		
 		$data = array();
-
 		if (isset($_GET['compId'])) {
 			$data['comp'] = $this->getCompetition($_GET['compId']); //TODO: sanitize input
 		}
@@ -149,6 +163,18 @@ class HashViewer {
 		}
 	}
 
+	public function deleteCompetition($id) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "hashviewer_competition";	
+		$rows = $wpdb->delete( $table_name , array( 'id' => $id ));
+
+		if ( isset($rows[0]) ){
+			return $rows[0];
+		} else {
+			return NULL;
+		}
+	}
+
 	public function getAllCompetitions() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "hashviewer_competition";	
@@ -159,8 +185,8 @@ class HashViewer {
 		return $rows;
 	}
 
-	public function create_new_competition() {
-
+	public static function createNewCompetition() {
+		// TODO: sanitize input
 		$title = (isset($_POST['title'])) ? $_POST['title'] : "" ;
 		$hashtags = (isset($_POST['hashtags'])) ? $_POST['hashtags'] : "" ;
 		$startTime = (isset($_POST['startDay'])) ? $_POST['startDay'] : "" ;

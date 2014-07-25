@@ -40,6 +40,7 @@
 
 /* List view */
 .competition-table {
+	margin-bottom: 10px;
 }
 
 .competition-table tbody tr:nth-child(odd) { background-color: #F9F9F9;}

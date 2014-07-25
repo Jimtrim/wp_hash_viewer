@@ -1,17 +1,18 @@
 <div class="wrap">
 <h3>Instagram HashViewer</h3>
 <div class="row">
-	<div class="col-sm-8">
+	{# adjust gallery size depending if a competition is selected #}
+	<div class="col-sm-{{ comp is defined ? '8' : '11' }}">
+		{# Search block, only visible if no competition is selected #}
+		{% if comp is empty %}
 		<div class="row">
 			<div class="col-md-12">
 				<div class="form-group">
 
 					<div class="input-group">
-						<input type="text" id="tag-text" class="form-control" 
-							{% if comp.hashtags is defined %}value={{ comp.hashtags }}{% endif %}
-						>
+						<input type="text" id="tag-text" class="form-control">
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="tag-btn" onClick="HashViewer.updateTag()">Go!</button>
+							<button class="btn btn-default" type="button" id="tag-btn" onClick="HashViewer.updateGallery()">Go!</button>
 						</span>
 					</div>
 
@@ -19,6 +20,7 @@
 				</div>
 			</div>
 		</div>
+		{% endif %}
 
 		<div class="container col-sm-12">
 			<div id="error-container" class="hidden alert alert-danger">
@@ -32,6 +34,9 @@
 
 		
 	</div>
+
+	{# admin-panel, only visible if a competition is selected #}
+	{% if comp.hashtags is defined %}
 	<div class="col-sm-3">
 		<div id="hashviewer-admin-panel">
 			<h4>Manage competitions</h4> 
@@ -41,8 +46,12 @@
 			{% endif %}
 		</div>
 	</div>
+	{% endif %}
 </div>
 <div class="clearfix"></div>
+{% if comp.hashtags is defined %}
+	<script type="text/javascript"> HashViewer.updateGallery( "{{ comp.hashtags }}" );  </script>
+{{ comp.hashtags }}{% endif %}
 </div>
 <footer>
 	<hr />
