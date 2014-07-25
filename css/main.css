@@ -25,6 +25,12 @@
 .gallery-block p {
 	margin: 0;
 }
+.gallery-block .favorite-icon {
+	float: left;
+	margin: 3px 0 0 5px;
+}.gallery-block .favorite-icon:hover {
+	color:#D7384E;
+}
 
 .gallery-image {
 	margin: 0;
