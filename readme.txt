@@ -6,11 +6,11 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.9
 Tested up to: 3.9
-Stable tag: 1.0
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-HashViewer is a plugin for managing Instagram competitions based on hashtags within the admin panel.
+Instagram HashViewer is a plugin for managing Instagram competitions based on hashtags within the admin panel.
 
 == Description ==
 
@@ -39,6 +39,9 @@ It should be stable, but do not expect the plugin you see today to be the same y
 No upgrade notice yet
 
 == Changelog ==
+
+= 1.0.2 =
+* Competitions are linked to Browse mode
 
 = 1.0 =
 * Got the wordpress.org trunk up and going

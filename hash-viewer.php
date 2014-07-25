@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: InstagramHashViewer
+ * Plugin Name: Instagram HashViewer
  * Plugin URI: http://www.hashviewer.net/
  * Description: View and rate Instagram pictures
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Jim Frode Hoff
  * Author URI: http://jimtrim.github.io
  */
