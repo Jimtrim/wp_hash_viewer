@@ -15,9 +15,9 @@ class HashViewer {
 	private function __construct() {
 
 		// Load Composer plugins
-		require_once HASHVIEWER_PLUGIN_DIR. '/vendor/autoload.php';
+		require_once HASHVIEWER_PLUGIN_DIR . '/vendor/autoload.php';
 		// Load Instagram-PHP-API
-		require_once HASHVIEWER_PLUGIN_DIR. '/vendor/Instagram.class.php';
+		require_once HASHVIEWER_PLUGIN_DIR . '/vendor/Instagram.class.php';
 
 		$loader = new Twig_Loader_Filesystem( HASHVIEWER_PLUGIN_DIR . '/views/' );
 		$this->twig = new Twig_Environment( $loader );
@@ -191,7 +191,7 @@ class HashViewer {
 	public static function createNewCompetition() {
 		// TODO: sanitize input
 		$title = ( isset( $_POST['title'] ) ) ? $_POST['title'] : "" ;
-		$hashtags = ( isset( $_POST['hashtags'] ) ) ? $_POST['hashtags'] : "" ;
+		$hashtags = ( isset( $_POST['hashtags'] ) ) ? $this->filter_hashtag( $_POST['hashtags'] ): "" ;
 		$startTime = ( isset( $_POST['startDay'] ) ) ? $_POST['startDay'] : "" ;
 		$endTime = ( isset( $_POST['endDay'] ) ) ? $_POST['endDay'] : "" ;
 
@@ -216,19 +216,25 @@ class HashViewer {
 	}
 
 	public static function createNewSubmission() {
-		$data = array(
+		$submission = array( //TODO: add input sanitization
 			'compId' => "",
-			'instagramMediaId' => "",
-	        'instagramUsername' => "",
-	        'instagramImage' => "",
-	        'createdAt' => "",
+			'mediaId' => "",
+			'instagramUsername' => "",
+			'instagramImage' => "",
+			'createdAt' => "",
 		);
 
+		foreach ( $submission as $key => $value )
+			if ( isset( $_POST[$key] ) )
+				$submission[$key] = $_POST[$key];
+			$submission['createdAt'] = date( "Y-m-d H:i:s", $submission['createdAt'] );
+
 		global $wpdb;
-		foreach ($data as $key => $value)
-			if (isset($_POST[$key]))
-				$data[$key] = $_POST[$key];
-		//TODO: add input sanitization
+		$table_name = $wpdb->prefix . "hashviewer_submission";
+		$affected_rows = $wpdb->insert( $table_name, $submission );
+		return $affected_rows;
+
+
 	}
 
 	private static function db_install() {
@@ -237,9 +243,9 @@ class HashViewer {
 		// come back to me if having \only\ 9 999 999 competitions is a problem
 		$competition_table_name = $wpdb->prefix . "hashviewer_competition";
 		$competition_sql = "CREATE TABLE " . $competition_table_name . "(
-			id 					mediumint(9) NOT NULL AUTO_INCREMENT,
-			title 				VARCHAR(50) NOT NULL,
-			active 				BOOL,
+			id					mediumint(9) NOT NULL AUTO_INCREMENT,
+			title				VARCHAR(50) NOT NULL,
+			active				BOOL,
 			startTime			DATETIME,
 			endTime				DATETIME,
 			hashtags			VARCHAR(255),
@@ -250,19 +256,18 @@ class HashViewer {
 		// ... and each of those competitions have over 1000 approved submission
 		$submission_table_name = $wpdb->prefix . "hashviewer_submission";
 		$submission_sql = "CREATE TABLE " . $submission_table_name . "(
-			id 					mediumint(12) NOT NULL AUTO_INCREMENT,
-			compId 				mediumint(9) NOT NULL,
-			instagramUsername 	varchar(30), -- 30 is a limitation from Instagram
-			instagramMediaID 	VARCHAR(255),
-			instagramImage 		VARCHAR(255),
-			createdAt 			DATETIME, -- The time when the image was uploaded to Instagram
-			PRIMARY KEY (id),
+			mediaId				VARCHAR(50) NOT NULL, -- id gathered from Instagram
+			compId				mediumint(9) NOT NULL,
+			instagramUsername	varchar(30), -- 30 is a limitation from Instagram
+			instagramImage		VARCHAR(255),
+			createdAt			DATETIME, -- The time when the image was uploaded to Instagram
+			PRIMARY KEY (mediaId),
 			FOREIGN KEY (compId) REFERENCES $competition_table_name(id)
 		) CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		dbDelta( $submission_sql );
 		dbDelta( $competition_sql );
+		dbDelta( $submission_sql );
 	}
 
 	private static function db_uninstall() {
@@ -279,7 +284,7 @@ class HashViewer {
 	 * Utilities
 	 * */
 	public function filter_hashtag( $tag ) {
-		return preg_match( "\W*\w*", $tag );
+		return preg_match( "\W*(\w*)", $tag )[1];
 	}
 
 
@@ -288,10 +293,10 @@ class HashViewer {
 	 *  AJAX resources
 	 * */
 	public function save_image() {
-		
-		$this->createNewSubmission();
 
-		echo "Submission for id ".$_POST['instagramMediaId']." created (when createNewSubmission actually sends its SQL)";
+		echo "Affected rows: " . $this->createNewSubmission();
+
+		echo "Submission for id ".$_POST['mediaId']." created (when createNewSubmission actually sends its SQL)";
 		exit();
 	}
 

@@ -2,7 +2,7 @@
 <h3>Instagram HashViewer</h3>
 <div class="row">
 	{# adjust gallery size depending if a competition is selected #}
-	<div class="col-sm-{{ comp is defined ? '8' : '11' }}">
+	<div class="col-xs-{{ comp is defined ? '8' : '11' }}">
 		{# Search block, only visible if no competition is selected #}
 		{% if comp is empty %}
 		<div class="row">
@@ -37,7 +37,7 @@
 
 	{# admin-panel, only visible if a competition is selected #}
 	{% if comp is defined %}
-	<div class="col-sm-3">
+	<div class="col-xs-3">
 		<div id="hashviewer-admin-panel">
 			<h4>Manage competitions</h4> 
 			{% if comp.title is defined %}
