@@ -68,17 +68,16 @@ HashViewer.displayError = function(message) {
 	console.log(message);
 };
 
-HashViewer.updateGallery = function(event, in_tag) {
+HashViewer.updateGallery = function(in_tag) {
 	console.log("updateGallery called");
 	jQuery('#error-container').addClass('hidden'); // Hide old errors
-	var tag = in_tag || HashViewer.getInputValue();
+	var tag = in_tag || HashViewer.last_tag || HashViewer.getInputValue();
 	tag = Util.removeLeadingHash(tag);
 
 	if (tag === "") return;
-	if (HashViewer.last_tag != tag) {
+	if (HashViewer.last_tag != tag)
 		HashViewer.reset();
-		HashViewer.last_tag = tag;
-	}
+	HashViewer.last_tag = tag;
 
 
 	if (HashViewer.getInputValue() === "") 
