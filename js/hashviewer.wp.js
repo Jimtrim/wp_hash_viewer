@@ -19,6 +19,6 @@ HashViewer.wp.saveImage = function(id) {
     	console.log(data);
     	console.log("---")
         console.log('Got this from the server: \n' + response);
-        el.find('.favorite-icon').css("color", "green");
+        el.find('.favorite-icon').css("color", "#D7384E"); //TODO: fix inline styling
     });
 }

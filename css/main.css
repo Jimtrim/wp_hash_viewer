@@ -28,9 +28,11 @@
 .gallery-block .favorite-icon {
 	float: left;
 	margin: 3px 0 0 5px;
-}.gallery-block .favorite-icon:hover {
-	color:#D7384E;
+	color:#000;
 }
+.gallery-block .favorite-icon:hover {color:#428BCA;}
+.gallery-block .favorite-icon .selected{color:#D7384E;}
+.gallery-block .favorite-icon a{color: inherit;}
 
 .gallery-image {
 	margin: 0;
@@ -46,7 +48,7 @@
 
 /* List view */
 .competition-table {margin-bottom: 10px;}
-.competition-table {margin-bottom: 10px;}
+.competition-table .small-field {width:80px;}
 .competition-table th {font-weight: bold;}
 .competition-table tbody tr:nth-child(odd) { background-color: #F9F9F9;}
 .competition-table tbody tr:nth-child(even) { background-color: #FFF;}

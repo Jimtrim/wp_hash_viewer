@@ -12,7 +12,7 @@
 					<div class="input-group">
 						<input type="text" id="tag-text" class="form-control">
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="tag-btn" onClick="HashViewer.updateGallery()">Go!</button>
+							<button class="btn btn-primary" type="button" id="tag-btn" onClick="HashViewer.updateGallery()">Go!</button>
 						</span>
 					</div>
 
@@ -32,14 +32,14 @@
 			</div>
 		</div>
 
-		
+
 	</div>
 
 	{# admin-panel, only visible if a competition is selected #}
 	{% if comp is defined %}
 	<div class="col-xs-3">
 		<div id="hashviewer-admin-panel">
-			<h4>Manage competitions</h4> 
+			<h4>Manage competitions</h4>
 			{% if comp.title is defined %}
 				<p>Competition</p>
 				<label>{{comp.title}}</label>
@@ -58,5 +58,3 @@
 	<hr />
 	<p><em>This page is made with the Instagram API.</em>
 </footer>
-
-

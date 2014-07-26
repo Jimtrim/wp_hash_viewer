@@ -1,30 +1,28 @@
+{% set table_columns %} 
+<tr>
+	<th class="manage small-field">Show</th>
+	<th class="manage">Title</th>
+	<th class="manage">Hashtag</th>
+	<th class="manage">Browse</th>
+	<th class="manage">Start time</th>
+	<th class="manage">End time</th>
+	<th class="manage">Winner</th>
+	<th class="manage">Delete</th>
+</tr>
+{% endset %}
+
+
 <h2>HashViewer - Competitions</h2>
 
 <div class="container col-sm-12">
 	<h3>Competitions</h3>
 	<table class="competition-table wp-list-table widefat fixed">
 		<thead>
-		<tr>
-			<th class="manage small-field">Active</th>
-			<th class="manage">Title</th>
-			<th class="manage">Hashtag</th>
-			<th class="manage">Browse</th>
-			<th class="manage">Start time</th>
-			<th class="manage">End time</th>
-			<th class="manage">Winner</th>
-			<th class="manage">Delete</th>
-		</tr>
+			{{ table_columns }}
 		</thead>
 		<tfoot>
-			<tr>
-			<th class="manage small-field">Active</th>
-			<th class="manage">Title</th>
-			<th class="manage">Hashtag</th>
-			<th class="manage">Browse</th>
-			<th class="manage">Start time</th>
-			<th class="manage">End time</th>
-			<th class="manage">Winner</th>
-			<th class="manage">Delete</th>
+		<tr>
+			{{ table_columns }}
 		</tr>
 		</tfoot>
 

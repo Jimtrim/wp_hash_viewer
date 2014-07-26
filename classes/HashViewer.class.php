@@ -191,7 +191,7 @@ class HashViewer {
 	public static function createNewCompetition() {
 		// TODO: sanitize input
 		$title = ( isset( $_POST['title'] ) ) ? $_POST['title'] : "" ;
-		$hashtags = ( isset( $_POST['hashtags'] ) ) ? $this->filter_hashtag( $_POST['hashtags'] ): "" ;
+		$hashtags = ( isset( $_POST['hashtags'] ) ) ? self::filter_hashtag( $_POST['hashtags'] ): "" ;
 		$startTime = ( isset( $_POST['startDay'] ) ) ? $_POST['startDay'] : "" ;
 		$endTime = ( isset( $_POST['endDay'] ) ) ? $_POST['endDay'] : "" ;
 
@@ -283,14 +283,18 @@ class HashViewer {
 	/**
 	 * Utilities
 	 * */
-	public function filter_hashtag( $tag ) {
-		return preg_match( "\W*(\w*)", $tag )[1];
+	public static function filter_hashtag( $tag ) {
+		$match = array();
+		preg_match( "/\W*(\w*)/", $tag, $match);
+		return $match[1];
 	}
 
 
 
 	/**
 	 *  AJAX resources
+	 * these need to be registered in hash-viewer.php
+	 * example: add_action('wp_ajax_<post_parameter_action>', array( $viewer, '<function>' ) );
 	 * */
 	public function save_image() {
 
