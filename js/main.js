@@ -1,10 +1,37 @@
-var Util = Util || {};
-Util.removeLeadingHash = function(str) {
-	if (typeof str == "string" && str.charAt(0) == '#') {
-		return str.substring(1);
+/**
+* Define Array.indexOf for IE 6, 7 and 8
+* Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf 
+*/
+
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (searchElement, fromIndex) {
+	var k;
+	if (this == null) {
+	  throw new TypeError('"this" is null or not defined');
 	}
-	return str;
-};
+	var O = Object(this);
+	var len = O.length >>> 0;
+	if (len === 0) {
+	  return -1;
+	}
+	var n = +fromIndex || 0;
+	if (Math.abs(n) === Infinity) {
+	  n = 0;
+	}
+	if (n >= len) {
+	  return -1;
+	}
+	k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+	while (k < len) {
+	  var kValue;
+	  if (k in O && O[k] === searchElement) {
+		return k;
+	  }
+	  k++;
+	}
+	return -1;
+  };
+}
 
 
 var HashViewer = HashViewer || {};
@@ -53,6 +80,9 @@ HashViewer.createGalleryBlock = function(post) {
 
 	var param = post.id +',' + post.id +','
 
+	var fav_class = (HashViewer.wp.savedImages.indexOf(post.id) >= 0 ? "saved" : "unsaved");
+
+	// define data-attributes, making storing of favorited images easier
 	var out = '<div class="gallery-block text-center"' 
 					+' data-mediaid="'+post.id+'"'
 					+' data-username="'+user.username+'"'
@@ -63,7 +93,7 @@ HashViewer.createGalleryBlock = function(post) {
 	out += '<em>User: <a href="http://instagram.com/' + user.username + '">' + user.username + '</a></em>';
 	if (jQuery('#compIdField').text() != "") { // Image selection should only be used when in competition mode
 		out += '<a href="javascript:HashViewer.wp.saveImage(\''+post.id+'\');">'
-		out += '<span class="favorite-icon glyphicon glyphicon-heart"></span>';
+		out += '<span class="favorite-icon ' + fav_class + ' glyphicon glyphicon-heart"></span>';
 		out += '</a>';
 	}
 	out += '</div>'; //width-fix END
@@ -79,23 +109,31 @@ HashViewer.displayError = function(message) {
 HashViewer.updateGallery = function(in_tag) {
 	console.log("updateGallery called");
 	jQuery('#error-container').addClass('hidden'); // Hide old errors
-	var tag = in_tag || HashViewer.getInputValue() || HashViewer.last_tag;
-	tag = Util.removeLeadingHash(tag);
+	
 
+	// get tag, and store as last tag for future comparison
+	var tag = in_tag || HashViewer.getInputValue() || HashViewer.last_tag;
+	tag = HashViewer.util.removeLeadingHash(tag);
 	if (tag === "") return;
 	if (HashViewer.last_tag != tag)
 		HashViewer.reset();
 	HashViewer.last_tag = tag;
 
-
+	// Set search field input tag if none present
 	if (HashViewer.getInputValue() === "")
-		HashViewer.setInputValue(tag); // Set search field to location hash when navigating directly to search
+		HashViewer.setInputValue(tag); 
 
+	// save next url for use in Load More button
 	HashViewer.next_url = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent?client_id=' + HashViewer.CLIENT_ID;
 	console.log(HashViewer.next_url);
 	if (HashViewer.next_max_tag_id)
 		HashViewer.next_url += "&max_tag_id=" + HashViewer.next_max_tag_id;
 
+	// make sure that a list Hashviewer.wp.savedImages exists
+	HashViewer.wp = HashViewer.wp || {};
+	HashViewer.wp.savedImages = HashViewer.wp.savedImages || [];
+
+	// request next block of images
 	jQuery.ajax({
 		url: HashViewer.next_url,
 		type: 'get',
@@ -131,6 +169,16 @@ HashViewer.updateGallery = function(in_tag) {
 	return this;
 };
 
+
+HashViewer.util = HashViewer.Util || {};
+HashViewer.util.removeLeadingHash = function(str) {
+	if (typeof str == "string" && str.charAt(0) == '#') {
+		return str.substring(1);
+	}
+	return str;
+};
+
+
 jQuery(document).ready(function($) {
 	// $("button[id='tag-btn']").bind('click', HashViewer.updateWindowHash()); 
 	HashViewer.getInputField().keypress(function(e) { // enter-fix for search
@@ -142,4 +190,6 @@ jQuery(document).ready(function($) {
 			return true;
 		}
 	});
+	HashViewer.wp.getSavedImages();
+
 });

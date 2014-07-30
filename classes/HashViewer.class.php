@@ -19,6 +19,7 @@ class HashViewer {
 		// Load Instagram-PHP-API
 		require_once HASHVIEWER_PLUGIN_DIR . '/vendor/Instagram.class.php';
 
+		// set up Twig templating engine for the views
 		$loader = new Twig_Loader_Filesystem( HASHVIEWER_PLUGIN_DIR . '/views/' );
 		$this->twig = new Twig_Environment( $loader );
 
@@ -28,6 +29,7 @@ class HashViewer {
 		add_action( 'wp_enqueue_styles', array( $this, 'register_frontend_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 
+		// define slugs for the menu
 		$this->slugs = array(
 			'main' => 'hashviewer_main',
 			'new_competition' => 'hashviewer_new_competition',
@@ -122,10 +124,15 @@ class HashViewer {
 
 		$data = array();
 		if ( isset( $_GET['compId'] ) ) {
+			if (isset($_GET['savedOnly'])) {
+				echo $this->twig->render( 'browse_saved.twig.html', $data ); // browse only saved if that is selected
+				return;
+			}
 			$data['comp'] = $this->getCompetition( $_GET['compId'] ); //TODO: sanitize input
 		}
 
 		echo $this->twig->render( 'browse.twig.html', $data );
+		return;
 	}
 
 
@@ -231,7 +238,20 @@ class HashViewer {
 
 		global $wpdb;
 		$table_name = $wpdb->prefix . "hashviewer_submission";
-		$affected_rows = $wpdb->insert( $table_name, $submission );
+
+
+		$alreadyGot = $wpdb->get_results(
+                        "SELECT COUNT(*) AS TOTALCOUNT
+                        FROM {$table_name}
+                        WHERE mediaId = '{$submission['mediaId']}'"
+                    );
+		if ($alreadyGot[0]->TOTALCOUNT == 0) {
+			$affected_rows = $wpdb->insert( $table_name, $submission );
+			echo "submission created";
+		} else {
+			echo "Image already saved";
+			return 0;
+		}
 		return $affected_rows;
 
 
@@ -297,11 +317,27 @@ class HashViewer {
 	 * example: add_action('wp_ajax_<post_parameter_action>', array( $viewer, '<function>' ) );
 	 * */
 	public function save_image() {
-
-		echo "Affected rows: " . $this->createNewSubmission();
-
-		echo "Submission for id ".$_POST['mediaId']." created (when createNewSubmission actually sends its SQL)";
+		$this->createNewSubmission();
 		exit();
+	}
+
+	public function get_saved_images($id = "") {
+		$results = array();
+		if (isset($_GET['compId'])) {
+			$id = $_GET['compId'];
+		}
+		if ( $id != "") {
+			global $wpdb;
+			$table_name = $wpdb->prefix . "hashviewer_submission";
+			$id = esc_sql($id);
+			$sql = "SELECT mediaId FROM $table_name WHERE compId=$id";
+			$results = $wpdb->get_col($sql);
+
+		}
+		if (isset($_GET['compId'])) 
+			echo json_encode($results);
+
+		exit(); //required to not get 0 at the end of the response
 	}
 
 }

@@ -23,6 +23,6 @@ register_deactivation_hook( __FILE__, array( 'HashViewer', 'plugin_deactivate' )
 register_uninstall_hook( __FILE__, array( 'HashViewer', 'plugin_uninstall' ) );
 
 
-
-// Register action to be run on request
+// Register AJAX actions
 add_action( 'wp_ajax_save_image', array( $viewer, 'save_image' ) );
+add_action( 'wp_ajax_get_saved_images', array( $viewer, 'get_saved_images' ) );

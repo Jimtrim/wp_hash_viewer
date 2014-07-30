@@ -21,9 +21,7 @@
 			{{ table_columns }}
 		</thead>
 		<tfoot>
-		<tr>
 			{{ table_columns }}
-		</tr>
 		</tfoot>
 
 		<tbody>
@@ -47,7 +45,14 @@
 			<td>{{ comp.startTime|date("d. M, Y H:i") }}</td>
 			<td>{{ comp.endTime|date("d. M, Y H:i") }}</td>
 			
-			<td>{{ comp.winnerSubmissionId ? comp.winnerSubmissionId : 'Not decided' }}</td>
+			<td>
+				{% if comp.winnerSubmissionId is defined %} 
+					{{ comp.winnerSubmissionId }}
+				{% else %}
+					<a href="{{ browse_url }}&compId={{ comp.id }}&savedOnly=1" title="Browse saved">
+					Not decided, pick now?
+				{% endif %}
+			</td>
 			<td>
 				<form action="{{ request_url }}" method="post">
 					<input type='hidden' name='action' value='delete-competition' />
