@@ -42,8 +42,8 @@ class HashViewer {
 	 */
 	// Frontend
 	public function register_frontend_scripts() {
-		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/main.js' );
-		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/hashviewer.wp.js', array( 'jquery' ) );
+		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/hashviewer.js',	 array( 'jquery' ) );
+		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/hashviewer.wp.js', array( 'jquery', 'hashviewer_script' ) );
 	}
 	public function register_frontend_styles() {
 		wp_enqueue_style( 'hashviewer-style', HASHVIEWER_PLUGIN_URL . 'css/main.css' );
@@ -63,8 +63,8 @@ class HashViewer {
 	}
 
 	public function admin_init() {
-		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/main.js', array( 'jquery' ) );
-		wp_enqueue_script( 'hashviewer_wp_script', HASHVIEWER_PLUGIN_URL . 'js/hashviewer.wp.js', array( 'jquery' ) );
+		wp_enqueue_script( 'hashviewer_script', HASHVIEWER_PLUGIN_URL . 'js/hashviewer.js', array( 'jquery' ) );
+		wp_enqueue_script( 'hashviewer_wp_script', HASHVIEWER_PLUGIN_URL . 'js/hashviewer.wp.js', array( 'jquery', 'hashviewer_script' ) );
 
 
 		wp_register_style( 'bootstrap-style', HASHVIEWER_PLUGIN_URL . 'css/bootstrap.min.css' );
@@ -321,7 +321,7 @@ class HashViewer {
 		exit();
 	}
 
-	public function get_saved_images($id = "") {
+	public function get_saved_images_list($id = "") {
 		$results = array();
 		if (isset($_GET['compId'])) {
 			$id = $_GET['compId'];
@@ -329,13 +329,34 @@ class HashViewer {
 		if ( $id != "") {
 			global $wpdb;
 			$table_name = $wpdb->prefix . "hashviewer_submission";
-			$id = esc_sql($id);
+			$id = esc_sql($id); // escape SQL characters
 			$sql = "SELECT mediaId FROM $table_name WHERE compId=$id";
 			$results = $wpdb->get_col($sql);
 
 		}
 		if (isset($_GET['compId'])) 
 			echo json_encode($results);
+
+		exit(); //required to not get 0 at the end of the response
+	}
+
+	public function get_saved_images($id = "") {
+		$results = array();
+		if (isset($_GET['compId'])) {
+			$id = $_GET['compId'];
+
+			global $wpdb;
+			$table_name = $wpdb->prefix . "hashviewer_submission";
+			$id = esc_sql($id); // escape SQL characters
+			$sql = "SELECT mediaId FROM $table_name WHERE compId=$id";
+			$results = $wpdb->get_results($sql);
+
+			echo json_encode($results);
+
+		} else {
+			echo "{}";
+		}
+			
 
 		exit(); //required to not get 0 at the end of the response
 	}

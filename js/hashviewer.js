@@ -78,8 +78,6 @@ HashViewer.createGalleryBlock = function(post) {
 	var image = post.images.low_resolution;
 	var user = post.user;
 
-	var param = post.id +',' + post.id +','
-
 	var fav_class = (HashViewer.wp.savedImages.indexOf(post.id) >= 0 ? "saved" : "unsaved");
 
 	// define data-attributes, making storing of favorited images easier

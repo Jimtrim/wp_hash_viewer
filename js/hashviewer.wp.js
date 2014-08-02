@@ -31,7 +31,7 @@ HashViewer.wp.saveImage = function(id) {
 HashViewer.wp.getSavedImages = function() {
 
     var data = {
-        'action': 'get_saved_images',
+        'action': 'get_saved_images_list',
         'compId': parseInt(jQuery('#compIdField').text(), 10)
     };
 
