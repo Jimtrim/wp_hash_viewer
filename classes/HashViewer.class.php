@@ -58,7 +58,7 @@ class HashViewer {
 			$this->slugs['main'] ); // main menu item
 		add_submenu_page( "hashviewer_main", "HashViewer - New competition", "New competition", 'manage_options',
 			$this->slugs['new_competition'], array( $this, 'new_competition' ) );
-		add_submenu_page( "hashviewer_main", "HashViewer - Browse", "Browse Instagram", 'manage_options',
+		add_submenu_page( "hashviewer_main", "HashViewer - Browse", "Browse", 'manage_options',
 			$this->slugs['browse'], array( $this, 'browse' ) );
 	}
 
@@ -124,11 +124,13 @@ class HashViewer {
 
 		$data = array();
 		if ( isset( $_GET['compId'] ) ) {
+			$data['comp'] = $this->getCompetition( $_GET['compId'] ); //TODO: sanitize input
+
 			if (isset($_GET['savedOnly'])) {
-				echo $this->twig->render( 'browse_saved.twig.html', $data ); // browse only saved if that is selected
+				$data['submissions'] = $this->getSubmissions( $_GET['compId'] ); //TODO: sanitize input
+				echo $this->twig->render( 'browse_saved.twig.html', $data );
 				return;
 			}
-			$data['comp'] = $this->getCompetition( $_GET['compId'] ); //TODO: sanitize input
 		}
 
 		echo $this->twig->render( 'browse.twig.html', $data );
@@ -173,6 +175,18 @@ class HashViewer {
 		}
 	}
 
+	public function getSubmissions( $compId ) {
+		if ($compId != "" ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . "hashviewer_submission";
+			$id = esc_sql($compId); // escape SQL characters
+			$sql = "SELECT * FROM $table_name WHERE compId=$compId";
+			$results = $wpdb->get_results($sql);
+
+		}
+		return $results;
+	}
+
 	public function deleteCompetition( $id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "hashviewer_competition";
@@ -202,14 +216,8 @@ class HashViewer {
 		$startTime = ( isset( $_POST['startDay'] ) ) ? $_POST['startDay'] : "" ;
 		$endTime = ( isset( $_POST['endDay'] ) ) ? $_POST['endDay'] : "" ;
 
-
-
 		global $wpdb;
 		$table_name = $wpdb->prefix . "hashviewer_competition";
-
-		//$startTime = strtotime($startTime);
-		//$endTime = strtotime($endTime);
-
 
 		$competition = array(
 			'title'  => $title,
@@ -309,12 +317,10 @@ class HashViewer {
 		return $match[1];
 	}
 
-
-
 	/**
 	 *  AJAX resources
 	 * these need to be registered in hash-viewer.php
-	 * example: add_action('wp_ajax_<post_parameter_action>', array( $viewer, '<function>' ) );
+	 * example: add_action('wp_ajax_<post_parameter_action>', array( $<class-instance>, '<function>' ) );
 	 * */
 	public function save_image() {
 		$this->createNewSubmission();
@@ -336,27 +342,6 @@ class HashViewer {
 		}
 		if (isset($_GET['compId'])) 
 			echo json_encode($results);
-
-		exit(); //required to not get 0 at the end of the response
-	}
-
-	public function get_saved_images($id = "") {
-		$results = array();
-		if (isset($_GET['compId'])) {
-			$id = $_GET['compId'];
-
-			global $wpdb;
-			$table_name = $wpdb->prefix . "hashviewer_submission";
-			$id = esc_sql($id); // escape SQL characters
-			$sql = "SELECT mediaId FROM $table_name WHERE compId=$id";
-			$results = $wpdb->get_results($sql);
-
-			echo json_encode($results);
-
-		} else {
-			echo "{}";
-		}
-			
 
 		exit(); //required to not get 0 at the end of the response
 	}
