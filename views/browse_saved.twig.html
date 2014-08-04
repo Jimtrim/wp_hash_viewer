@@ -1,63 +1,24 @@
 <div class="wrap">
 <h3>Instagram HashViewer</h3>
 <div class="row">
-	{# adjust gallery size depending if a competition is selected #}
-	<div class="col-xs-{{ comp is defined ? '8' : '11' }}">
-		{# Search block, only visible if no competition is selected #}
-		{% if comp is empty %}
-		<div class="row">
-			<div class="col-md-12">
-				<div class="form-group">
-
-					<div class="input-group">
-						<input type="text" id="tag-text" class="form-control">
-						<span class="input-group-btn">
-							<button class="btn btn-primary" type="button" id="tag-btn" onClick="HashViewer.updateGallery()">Go!</button>
-						</span>
-					</div>
-
-					<span class="help-block">Input Instagram tag</span>
+	<div class="col-xs-11 }}">
+		<div id="gallery">
+			{% for sub in submissions %}
+				<div class="gallery-block text-center" 
+					data-mediaid={{ sub.mediaId }}
+					data-username={{ sub.instagramUsername }}
+					data-imageurl={{ sub.instagramImage }}
+					data-createdat={{ sub.createdAt }}
+				>
+					<a href="http://instagram.com/{{ sub.mediaId }}"><img class="gallery-image col-sm-12" src ="{{ sub.instagramImage }}" /></a>
+					<em>User: <a href="http://instagram.com/{{ sub.instagramUsername }}">{{ sub.instagramUsername }}</a></em>
 				</div>
-			</div>
+			{% endfor %}
 		</div>
-		{% endif %}
-
-		<div class="container col-sm-12">
-			<div id="error-container" class="hidden alert alert-danger">
-			</div>
-			<div id="gallery" class="row">
-			</div>
-			<div class="col-xs-12 text-center">
-				<button onclick="HashViewer.updateGallery()" class="hidden btn btn-default btn-lg" type="button" id="more-btn">Load more</button>
-			</div>
-		</div>
-
-
 	</div>
+</div>
 
-	{# admin-panel, only visible if a competition is selected #}
-	{% if comp is defined %}
-	<div class="col-xs-3">
-		<div id="hashviewer-admin-panel">
-			<h4>Manage competitions</h4>
-			{% if comp.title is defined %}
-				<p>Competition</p>
-				<label>{{comp.title}}</label>
-			{% endif %}
-		</div>
-		<span id="compIdField" class="hidden">{{ comp.id }}</span>
-	</div>
-	{% endif %}
-</div>
-<div class="clearfix"></div>
-{% if comp.hashtags is defined %}
-	<script type="text/javascript">
-		jQuery( document ).ready( funnction() {
-			HashViewer.updateGallery("{{ comp.hashtags }}") 
-		});  
-	</script>
-{% endif %}
-</div>
+
 <footer>
 	<hr />
 	<p><em>This page is made with the Instagram API.</em>

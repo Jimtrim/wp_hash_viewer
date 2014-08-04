@@ -50,9 +50,16 @@
 	{% endif %}
 </div>
 <div class="clearfix"></div>
-{% if comp.hashtags is defined %}
 	<script type="text/javascript">HashViewer.updateGallery("{{ comp.hashtags }}");  </script>
-{% endif %}
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			{% if comp is empty %}
+				HashViewer.updateGallery("{{ comp.hashtags }}"); 
+			{% else %}
+				HashViewer.wp.getSavedImages();
+			{% endif %}
+		} );
+	</script>
 </div>
 <footer>
 	<hr />

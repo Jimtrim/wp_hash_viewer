@@ -46,11 +46,14 @@
 			<td>{{ comp.endTime|date("d. M, Y H:i") }}</td>
 			
 			<td>
-				{% if comp.winnerSubmissionId is defined %} 
-					{{ comp.winnerSubmissionId }}
+				{% if comp.winnerSubmissionId is not null %} 
+					<span>
+						{{ comp.winnerSubmissionId }}
+					</span>
 				{% else %}
-					<a href="{{ browse_url }}&compId={{ comp.id }}&savedOnly=1" title="Browse saved">
+				<a href="{{ browse_url }}&compId={{ comp.id }}&savedOnly=1" title="Browse saved">
 					Not decided, pick now?
+				</a>
 				{% endif %}
 			</td>
 			<td>
